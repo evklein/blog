@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 
-import Navigation from '../components/Navigation.astro';
+import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 const pageTitle = "About Me";
@@ -36,25 +36,25 @@ const skillColor = "navy";
     </style>
   </head>
   <body>
-    <Navigation />
-
+		<Header />
     <h1>About Me</h1>
     <p>I'm a full stack software engineer, living in Indianapolis, IN.</p>
     <p>I'm passionate about building quality software.</p>
-
-
     <p>Here are a few facts about me:</p>
     <ul>
-    <li>My name is {identity.firstName}.</li>
-    <li>I live in {identity.country} and I work as a {identity.occupation}.</li>
-    {identity.hobbies.length >= 2 &&
-        <li>Two of my hobbies are: {identity.hobbies[0]} and {identity.hobbies[1]}</li>
-    }
+      <li>My name is {identity.firstName}.</li>
+      <li>I live in {identity.country} and I work as a {identity.occupation}.</li>
+      {identity.hobbies.length >= 2 &&
+          <li>Two of my hobbies are: {identity.hobbies[0]} and {identity.hobbies[1]}</li>
+      }
     </ul>
     <p>My skills are:</p>
     <ul>
-    {skills.map((skill) => <li class="skill">{skill}</li>)}
+      {skills.map((skill) => <li class="skill">{skill}</li>)}
     </ul>
     <Footer />
+    <script>
+			  import "../scripts/menu.js";
+		</script>
   </body>
 </html>
