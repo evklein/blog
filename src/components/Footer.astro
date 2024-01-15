@@ -1,5 +1,7 @@
 ---
 import Social from "./Social.astro";
+
+const currentFullYear: string = new Date().getFullYear()
 ---
 <style>
     footer {
@@ -7,8 +9,14 @@ import Social from "./Social.astro";
         gap: 1rem;
         margin-top: 2rem;
     }
+    
+    p {
+        padding: 0.5rem 1rem;
+    }
 </style>
 
 <footer>
-  <Social platform="Github" username="evklein" />
+    <Social externalUrl="https://github.com/evklein/" icon="github" />
+    <Social externalUrl="https://www.linkedin.com/in/evan-klein-40b255119/" icon="linkedin" />
+    <p>Copyright © Evan Klein {currentFullYear}</p>
 </footer>

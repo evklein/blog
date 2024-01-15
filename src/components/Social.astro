@@ -1,14 +1,16 @@
 ---
-const { platform, username } = Astro.props;
+const {
+    icon,
+    externalUrl,
+} = Astro.props;
 ---
 
-<a href={`https://www.${platform}.com/${username}`}>{platform}</a>
+<a href={externalUrl}>
+    <i data-feather={icon}></i>
+</a>
 
 <style>
     a {
         padding: 0.5rem 1rem;
-        color: white;
-        background-color: #4c1d95;
-        text-decoration: : none;
     }
 </style>
