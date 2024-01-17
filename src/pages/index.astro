@@ -3,10 +3,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Greeting from '../components/Greeting.jsx';
 const pageTitle = "Home Page";
 ---
+<style>
+.typing {
+    width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    border-bottom: 2px solid white; /* Cursor-like right border */
+    animation: typing 5s steps(13), blink-caret 1s step-end;
+    /* Adjust the timing and steps according to your text length */
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: red; }
+}
+
+</style>
 <BaseLayout pageTitle={pageTitle}>
-  <h1>Hey, I'm Evan.</h1>
+  <h1 class="typing">Hey, I'm <span style="color: green">Evan.</span></h1>
   <p>I'm a full stack software engineer based in Indianapolis, IN.</p>
   <p>I care about building useful tools, advancing important technology, and supporting others.</p>
   <i style="color: black" data-feather="circle"></i>
-
 </BaseLayout>

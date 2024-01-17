@@ -16,9 +16,16 @@ html.dark {
 body {
     margin: 0 auto;
     width: 100%;
-    max-width: 80ch;
+    max-width: 150ch;
     padding: 1rem;
     line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
 }
 
 * {
