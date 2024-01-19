@@ -50,24 +50,41 @@ h1 {
     margin-bottom: 10px;
     background-color: #ff9776;
   }
+
+#name {
+    display: inline-block;
+}
   
 .nav-links {
+    float: right;
     width: 100%;
     top: 5rem;
     left: 48px;
     background-color: #ff9776;
     display: none;
     margin: 0;
+    display: inline-block;
 }
   
 .nav-links a {
     display: block;
     text-align: center;
     padding: 10px 0;
+    margin: 15px;
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: bold;
+    transition: .1s ease-out;
     /* text-transform: uppercase; */
+}
+
+.nav-links .offset {
+    background-color: white;
+    border: 2px solid hwb(165 26% 25%);
+    box-shadow: 0.4em 0.3em 0 0 hwb(165 26% 25%);
+    text-decoration: none !important;
+    font-size: 14px;
+    color: hwb(165 26% 25%);;
 }
   
 .nav-links a:hover,
@@ -78,6 +95,17 @@ h1 {
 .expanded {
     display: unset;
 }
+
+.tag {
+    margin: 0.25em;
+    border-radius: .5em;
+    padding: .5em 1em;
+    font-size: 12pt;
+    border: none;
+    border-radius: 50px;
+    background-color: hwb(165 26% 25%);
+    color: white;
+  }
   
 @media screen and (min-width: 636px) {
     .nav-links {

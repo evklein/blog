@@ -2,35 +2,40 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Typewriter from '../components/Typewriter';
 const pageTitle = "Home Page";
+const allPosts = await Astro.glob('../pages/posts/*.md');
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <Typewriter client:load text="Hey, I'm Evan." makeMistakes mistakes={["Hey, I'um Evban"]}></Typewriter>
-  <p>I'm a full stack software engineer based in Indianapolis, IN.</p>
-  <p class="borkus">I care about building useful tools, advancing important technology, and supporting others.</p>
-  <i data-feather="circle"></i>
+  <div class="home-body">
+    <Typewriter client:load text="Hey, I'm Evan." makeMistakes mistakes={["Hey, I'um Evban", "Heaj, I'm ean"]} highlightedWords={[]}></Typewriter>
+    <div class="small-text">
+      <p>I'm a full-stack software engineer based in <b>Indianapolis, IN.</b></p>
+      <p>I care about building useful tools, advancing important technology, and supporting others. I'm currently working in the energy sector.</p>  
+    </div>
+  </div>
+  <div class="whats-new">
+    <h2>What's New?</h2>
+    <p>Recent posts, projects and other goodies</p>
+  </div>
 </BaseLayout>
-
-<script type="module">
-  const helloElement = document.getElementById("hello");
-  const pageText = "Hey, I'm Evan.";
-  let index = 0;
-
-
-  if (helloElement) {
-      type();
-  }
-</script>
-
 <style>
-    .blink {
-        margin-left: 5px;
-        background-color: red;
-        color: blue;
-        animation: blink 1s infinite;
-    }
-    @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
-    }
+  .home-body {
+    margin-top: 150px;
+  }
+
+  .small-text {
+    width: 700px;
+  }
+
+  .small-text p{
+    font-size: 16pt;
+  }
+
+  .whats-new {
+    margin-top: 600px;
+  }
+
+  .whats-new h2 {
+    font-size: 32px;
+  }
 </style>
