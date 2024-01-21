@@ -1,14 +1,9 @@
 ---
-const {
-    icon,
-    externalUrl,
-} = Astro.props;
+const { icon, externalUrl } = Astro.props;
 ---
-
 <a href={externalUrl}>
     <i data-feather={icon} />
 </a>
-
 <style>
     a {
         padding: 0.5rem 1rem;
