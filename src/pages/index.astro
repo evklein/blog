@@ -7,7 +7,7 @@ const allPosts = await Astro.glob('../pages/posts/*.md');
 
 <BaseLayout pageTitle={pageTitle}>
   <div class="home-body">
-    <Typewriter client:load text="Hey, I'm Evan." makeMistakes mistakes={["Hey, I'um Evban", "Heaj, I'm ean"]} highlightedWords={[]}></Typewriter>
+    <Typewriter client:load text="Hey, I'm Evan." makeMistakes mistakes={["Hey, I'um Evban", "Heaj, I'm ean"]} highlightStartIndex={9} highlightEndIndex={13}></Typewriter>
     <div class="small-text">
       <p>I'm a full-stack software engineer based in <b>Indianapolis, IN.</b></p>
       <p>I care about building useful tools, advancing important technology, and supporting others. I'm currently working in the energy sector.</p>  

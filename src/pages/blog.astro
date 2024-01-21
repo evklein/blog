@@ -4,12 +4,50 @@ const allPosts = await Astro.glob('../pages/posts/*.md');
 const pageTitle = "My Astro Learning Blog";
 ---
 <BaseLayout pageTitle={pageTitle}>
-  <p>This is where I will post about my journey learning Astro.</p>
-  <ul>
-    {allPosts.map((post) =>
-        <li>
-            <a href={post.url}>{post.frontmatter.title}</a>
-        </li>
+  <h1>Posts</h1>
+  <p class="small">Various thoughts and musings on projects, engineering, and life.</p>
+  <h2>2024</h2>
+  <div>
+    {allPosts.sort(p => p.frontmatter.pubDate).reverse().map((post, index) =>
+        <div class={"post " + (index !== 0 ? "post-with-border" : null)}>
+            <h3><a href={post.url}>{post.frontmatter.title}</a></h3>
+            <p class="date">{post.frontmatter.pubDate.slice(0, 10)}</p>
+        </div>
     )}
-  </ul>
+  </div>
 </BaseLayout>
+<style>
+    h1 {
+        font-size: 3rem;
+    }
+    h2 {
+        font-size: 2.3rem;
+        margin-bottom: 0;
+    }
+    .small {
+        font-size: 12pt;
+    }
+    .post {
+        height: 10px !important;
+        display: inline-block;
+        width: 80%;
+    }
+    .post-with-border {
+        border-bottom: 1px solid hwb(165 26% 25%);
+    }
+    h3 {
+        display: inline-block;
+    }
+    .date {
+        float: right;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+        display: inline-block;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>

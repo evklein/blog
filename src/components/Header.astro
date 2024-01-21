@@ -5,8 +5,21 @@ import Navigation from './Navigation.astro';
 ---
 <header>
   <nav>
-    <h1 id="name">Evan Klein</h1>
+    <h1 id="name"><a href="/">Evan Klein</a></h1>
     <Hamburger />
     <Navigation />
   </nav>
 </header>
+
+<style>
+    #name {
+        font-size: 1.5rem;
+    }
+    #name a {
+        text-decoration: none;
+        color: black;
+    }
+    #name a:hover {
+        color: hwb(165 26% 25%);
+    }
+</style>

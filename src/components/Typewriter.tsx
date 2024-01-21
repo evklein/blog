@@ -2,13 +2,14 @@ import { useState, useEffect } from 'preact/hooks';
 import "../styles/Typewriter.css";
 
 interface TypewriterProps {
-    text: String;
-    highlightedWords: String[];
+    text: string;
+    highlightStartIndex: number;
+    highlightEndIndex: number;
     makeMistakes: boolean;
-    mistakes: String[];
+    mistakes: string[];
 };
 
-var textInProgress: String = "";
+var textInProgress: string = "";
 let hardenedTextIndex: number = 0;
 let index: number = 0;
 let turnaroundIndex: number;
@@ -123,7 +124,9 @@ export default function Typewriter(props: TypewriterProps) {
     return (
         <>
             <h1>
-                <span>{textToDisplay}</span>
+                <span>{textToDisplay.slice(0, props.highlightStartIndex)}</span>
+                <span style="color: hwb(165 26% 25%);">{textToDisplay.slice(props.highlightStartIndex, props.highlightEndIndex)}</span>
+                <span>{textToDisplay.slice(props.highlightEndIndex)}</span>
                 <span class="blink">_</span>
             </h1>
         </>

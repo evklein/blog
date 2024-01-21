@@ -7,19 +7,19 @@ const pageTitle = "Tag Index";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+    <p>Filter posts by tags below.</p>
     <div class="tags">
         {tags.map((tag => <p class="tag"><a href={`/tags/${tag}`}>{tag}</a></p>))}
-    </div>
-    <style>
-        a {
-          text-decoration: none;
-          color: white;
-        }
-      
-        .tags {
-          display: flex;
-          flex-wrap: wrap;
-        }
-      </style>
-      
+    </div>   
 </BaseLayout>
+<style>
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+    }
+</style>
