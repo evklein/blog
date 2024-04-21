@@ -19,5 +19,8 @@
     "react-code-blocks": "^0.1.6",
     "scss": "^0.2.4",
     "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
