@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-const allPosts = await Astro.glob('../pages/posts/*.md');
+// const allPosts = await Astro.glob('../pages/posts/*.md');
 const pageTitle = "My Astro Learning Blog";
 ---
 <BaseLayout pageTitle={pageTitle}>
@@ -8,12 +8,12 @@ const pageTitle = "My Astro Learning Blog";
   <p class="small">Various thoughts and musings on projects, engineering, and life.</p>
   <h2>2024</h2>
   <div>
-    {allPosts.sort(p => p.frontmatter.pubDate).reverse().map((post, index) =>
+    <!-- {allPosts.sort(p => p.frontmatter.pubDate).reverse().map((post, index) =>
         <div class={"post " + (index !== 0 ? "post-with-border" : null)}>
             <h3><a href={post.url}>{post.frontmatter.title}</a></h3>
             <p class="date">{post.frontmatter.pubDate.slice(0, 10)}</p>
         </div>
-    )}
+    )} -->
   </div>
 </BaseLayout>
 <style>
