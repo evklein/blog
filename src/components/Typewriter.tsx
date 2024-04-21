@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'preact/hooks';
-import "../styles/Typewriter.css";
+import "../styles/typewriter.css";
 
 interface TypewriterProps {
     text: string;
