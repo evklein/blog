@@ -7,7 +7,6 @@ dist/
 node_modules/
 
 # blogs (temporary)
-src/pages/posts/*
 src/pages/posts/ideas.md
 
 # logs
