@@ -1,6 +1,6 @@
 ---
-title: 'Hello world'
-pubDate: 2022-07-01
+title: 'Building animated identicons for this blog'
+pubDate: 2024-05-21
 description: 'This is the first post of my new Astro blog.'
 author: 'Astro Learner'
 image:

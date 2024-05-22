@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout pageTitle="Evicons">
+    <div class="evicon-about">
+        <h1>Evicons</h1>
+        <p>
+            <b>Evicons</b> are a type of <a href="">identicon</a>, created by myself, and inspired by the famous <a href="">Github identicons.</a> Unlike Github identicons (or some other identicons like <a href="">Gravatars</a>), evicons are animated using <a href="">Perlin noise</a>.
+        </p>
+        <p>
+            Evicons take an input string and convert it to an MD5 hash which is used to build the animation. Each evicon is cryptographically unique for its input.
+        </p>
+        <p>You'll see evicons being used around this site for identifying pieces of information like blog posts and projects. I encourage you to mess around and create your own below!</p>
+    </div>
+    <div>
+        <input id="evicon-text-input" type="text">
+        <canvas id="evicon" class="evicon" width="150" height="150"></canvas>
+    </div>
+</BaseLayout>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js" defer></script>
+<script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof CryptoJS === 'undefined') {
+            console.error('CryptoJS is not loaded');
+        } else {
+            console.log('CryptoJS loaded successfully');
+            const script = document.createElement('script');
+            script.id = "evicon-script";
+            script.src = '../src/scripts/evicons.js';
+            document.body.appendChild(script);
+
+            document.getElementById('evicon-text-input').addEventListener('input', changeInputText);
+        }
+    });
+
+    var intervalId = undefined;
+    function changeInputText(event) {
+        if (intervalId) {
+            stopRenderingEvicon(intervalId);
+            intervalId = undefined;
+        }
+        if (event.target.value) {
+            intervalId = renderEvicon(event.target.value);
+        }
+    }
+</script>
+<style>
+    .main-about {
+        width: 700px;
+    }
+
+    p {
+        font-size: 14pt;
+    }
+
+    .site-about {
+        margin-top: 5rem;
+    }
+</style>
