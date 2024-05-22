@@ -11,11 +11,29 @@ const pageTitle = "My Astro Learning Blog";
     {allPosts.sort(p => p.frontmatter.pubDate).reverse().map((post, index) =>
         <div class={"post " + (index !== 0 ? "post-with-border" : null)}>
             <h3><a href={post.url}>{post.frontmatter.title}</a></h3>
+            <p class="date">
+                <a href="/evicons" title="What is this smudge?">
+                    <canvas class="evicon" id={post.frontmatter.title} width="25" height="25"></canvas>
+                </a>
+            </p>
             <p class="date">{post.frontmatter.pubDate.slice(0, 10)}</p>
         </div>
-    )}
+    )}    
   </div>
 </BaseLayout>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js" defer></script>
+<script src="/src/scripts/evicons.js" defer></script>
+<script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log(typeof renderAllEviconsOnPage)
+        if (typeof CryptoJS === 'undefined' || typeof renderAllEviconsOnPage === 'undefined') {
+            console.error('CryptoJS is not loaded');
+        } else {
+            renderAllEviconsOnPage();
+        }
+    });
+</script>
 <style>
     h1 {
         font-size: 3rem;
@@ -29,10 +47,12 @@ const pageTitle = "My Astro Learning Blog";
     }
     .post {
         height: 10px !important;
+        margin: 10px 0;
         display: inline-block;
-        width: 80%;
+        width: 90%;
     }
     .post-with-border {
+        margin: 10px 0;
         border-bottom: 1px solid hwb(165 26% 25%);
     }
     h3 {
@@ -49,5 +69,12 @@ const pageTitle = "My Astro Learning Blog";
     }
     a:hover {
         text-decoration: underline;
+    }
+
+    canvas {
+        margin-left: 10px;
+        margin-top: -3px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
     }
 </style>

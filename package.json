@@ -15,6 +15,7 @@
     "@astrojs/rss": "^4.0.2",
     "astro": "^4.7.0",
     "feather-icons": "^4.29.1",
+    "md5": "^2.3.0",
     "preact": "^10.19.3",
     "react-code-blocks": "^0.1.6",
     "scss": "^0.2.4",
@@ -22,5 +23,8 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/md5": "^2.3.5"
   }
 }

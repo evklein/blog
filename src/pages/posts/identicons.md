@@ -1,7 +1,6 @@
 ---
-layout: ../../layouts/MarkdownPostLayout.astro
-title: 'Hello world'
-pubDate: 2022-07-01
+title: 'Building animated identicons for this blog'
+pubDate: 2024-05-21
 description: 'This is the first post of my new Astro blog.'
 author: 'Astro Learner'
 image:
@@ -26,7 +25,3 @@ Welcome to my _new blog_ about learning Astro! Here, I will share my learning jo
 ## What's next
 
 I will finish the Astro tutorial, and then keep adding more posts. Watch this space for more to come.
-
-![alt text](https://docs.astro.build/assets/full-logo-light.png "Title")
-
-<img src="https://docs.astro.build/assets/full-logo-light.png" alt="title" />
