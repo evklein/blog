@@ -23,7 +23,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 <p id="gradient-vectors"></p>
             </div>
         </div>
-        <canvas style="height: 800px !important; border-radius: 0;" id="evicon" class="evicon" width="800" height="800"></canvas>
+        <div>
+            <canvas style="height: 150px !important;" id="evicon" class="evicon" width="150" height="150"></canvas>
+            <br />
+            <div id="display-vectors-section">
+                <input type="checkbox" name="showVectors" id="show-vectors-checkbox">
+                <label for="showVectors">Display vectors</label>
+            </div>
+        </div>
     </div>
 </BaseLayout>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js" defer></script>
@@ -34,6 +41,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     var colors;
     var hash;
     var gradientVectors;
+    var seed = 'Type something here';
+    var displayVectors = false;
 
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof CryptoJS === 'undefined') {
@@ -42,53 +51,40 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             document.getElementById('evicon-text-input').addEventListener('input', changeInputText);
             document.getElementById('evicon-text-input').addEventListener('focus', highlightEditIcon);
             document.getElementById('evicon-text-input').addEventListener('focusout', unhighlightEditIcon);
-            var renderResults = renderEvicon('Type something here');
-            intervalId = renderResults[0];
-            hash = renderResults[1];
-            colors = renderResults[2];
-            gradientVectors = renderResults[3];
-            document.querySelector('p#hash').innerHTML = ``;
-            document.querySelector('p#hash').innerHTML = `<b>MD5 Hash:</b> <i>${hash}</i>`;
-            document.querySelector('p#primary-color').innerHTML = `<b>Primary Color:</b> RGB(${colors.primaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.primaryColor}); display: inline-block; border-radius: 10px;">`;
-            document.querySelector('p#secondary-color').innerHTML = `<b>Secondary Color:</b> RGB(${colors.secondaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.secondaryColor}); display: inline-block; border-radius: 10px;">`;
-                let readableGradientVectors = '';
-            console.log(gradientVectors);
-            console.log(gradientVectors.length);
-            for (const [_, value] of Object.entries(gradientVectors)) {
-                console.log(value);
-                readableGradientVectors += `[${Math.trunc(value.endX * 100) / 100}, ${value.endY.toFixed(2)}]; `;
-            }
-            console.log(readableGradientVectors);
-            document.querySelector('p#gradient-vectors').innerHTML = `<b>Initial Gradient Vectors:</b> ${readableGradientVectors}`;
-
+            document.getElementById('show-vectors-checkbox').addEventListener('change', toggleVectorVisibility);
+            
+            createEvicon();
+            buildDetails();
         }
     });
 
-    function changeInputText(event) {
+    function buildDetails() {
+        document.querySelector('p#hash').innerHTML = ``;
+            document.querySelector('p#hash').innerHTML = `<b>MD5 Hash:</b> <i>${hash}</i>`;
+            document.querySelector('p#primary-color').innerHTML = `<b>Primary Color:</b> RGB(${colors.primaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.primaryColor}); display: inline-block; border-radius: 10px;">`;
+            document.querySelector('p#secondary-color').innerHTML = `<b>Secondary Color:</b> RGB(${colors.secondaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.secondaryColor}); display: inline-block; border-radius: 10px;">`;
+            
+            let readableGradientVectors = '';
+            for (const [_, value] of Object.entries(gradientVectors)) {
+                readableGradientVectors += `[${value.i.toFixed(3)}, ${value.j.toFixed(3)}]; `;
+            }
+            document.querySelector('p#gradient-vectors').innerHTML = `<b>Initial Gradient Vectors:</b> ${readableGradientVectors}`;
+
+    }
+
+    function stopEviconIfExists() {
         if (intervalId) {
             stopRenderingEvicon(intervalId);
             intervalId = undefined;
         }
-        var renderResults = renderEvicon(event.target.value);
-            intervalId = renderResults[0];
-            hash = renderResults[1];
-            colors = renderResults[2];
-            gradientVectors = renderResults[3];
-            document.querySelector('p#hash').innerHTML = ``;
-            document.querySelector('p#hash').innerHTML = `<b>MD5 Hash:</b> <i>${hash}</i>`;
-            document.querySelector('p#primary-color').innerHTML = `<b>Primary Color:</b> RGB(${colors.primaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.primaryColor}); display: inline-block; border-radius: 10px;">`;
-            document.querySelector('p#secondary-color').innerHTML = `<b>Secondary Color:</b> RGB(${colors.secondaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.secondaryColor}); display: inline-block; border-radius: 10px;">`;
-            let readableGradientVectors = '';
-            console.log(gradientVectors);
-            console.log(gradientVectors.length);
-            for (const [_, value] of Object.entries(gradientVectors)) {
-                console.log(value.endX.toFixed(2));
-                console.log('AHAHHAHAH');
-                readableGradientVectors += `[${Number(value.endX).toFixed(2)}, ${value.endY}]; `;
-            }
-            console.log(readableGradientVectors);
-            document.querySelector('p#gradient-vectors').innerHTML = `<b>Initial Gradient Vectors:</b> ${readableGradientVectors}`;
+    }
 
+    function changeInputText(event) {
+        stopEviconIfExists();
+        seed = event.target.value;
+
+        createEvicon();
+        buildDetails();
     }
 
     function highlightEditIcon() {
@@ -100,12 +96,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         document.querySelector('i#edit-icon').style.color = 'black';
         document.getElementById('evicon-text-input').style.borderColor = '#888';
     }
+
+    function createEvicon() {
+        var renderResults = renderEvicon(seed, displayVectors);
+
+        intervalId = renderResults[0];
+        hash = renderResults[1];
+        colors = renderResults[2];
+        gradientVectors = renderResults[3];
+    }
+
+    function toggleVectorVisibility(event) {
+        stopEviconIfExists();
+        displayVectors = event.target.checked;
+        createEvicon();
+    }
 </script>
 <style>
     .main-about {
         width: 700px;
     }
 
+    label {
+        font-size: 14px;
+    }
     p {
         font-size: 14pt;
     }
@@ -158,5 +172,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         font-size: 14px;
         margin: 6px 15px;
         line-height: 20px;
+    }
+
+    #display-vectors-section {
+        text-align: center;
     }
 </style>
