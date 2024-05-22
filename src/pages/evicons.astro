@@ -89,12 +89,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     function highlightEditIcon() {
         document.querySelector('i#edit-icon').style.color = '#42bfa0';
-        document.getElementById('evicon-text-input').style.borderColor = '#42bfa0';
+        document.getElementById('evicon-text-input').style.outlineColor = '#42bfa0';
+        this.select();
     }
 
     function unhighlightEditIcon() {
         document.querySelector('i#edit-icon').style.color = 'black';
-        document.getElementById('evicon-text-input').style.borderColor = '#888';
+        document.getElementById('evicon-text-input').style.outlineColor = '#888';
     }
 
     function createEvicon() {

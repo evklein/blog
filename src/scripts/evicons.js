@@ -33,21 +33,37 @@ function drawGrid(imageData) {
     }
 }
 
-function getRandomDirection() {
-    return Math.random() > 0.5 ? 1 : -1;
+function getFibonacciSequence() {
+    let fibonacciSequence = [];
+    let n1 = 1, n2 = 2; // Offset Fibonacci so we always get different numbers
+    let numberOfSequenceItems = (NUMBER_OF_SEGMENTS + 1) * (NUMBER_OF_SEGMENTS + 1) * 2;
+    for (let i = 0; i < numberOfSequenceItems; i++) {
+        fibonacciSequence.push(n1);
+        let nextTerm = n1 + n2;
+        n1 = n2;
+        n2 = nextTerm;
+    }
+    return fibonacciSequence;
+}
+
+function getRandomDirectionByHash(hash, index) {
+    while (index > hash.length) index -= hash.length;
+    return parseInt(hash[index], 16) < 8 ? -1 : 1;
 }
 
 function buildGradientVectors(seed, gridSegmentPxWidth, gridSegmentPxHeight) {
     let gradientVectors = [];
     const md5Hash = CryptoJS.MD5(seed).toString();
+    const fibonacciSequence = getFibonacciSequence();
 
     let seedIncrement = 0;
+    let directionIncrement = 0;
     for (let y = 0; y <= NUMBER_OF_SEGMENTS; y++) {
         for (let x = 0; x <= NUMBER_OF_SEGMENTS; x++) {
             let originX = x * gridSegmentPxWidth;
             let originY = y * gridSegmentPxHeight;
-            let nextSeedX = parseInt(md5Hash.substring(seedIncrement, seedIncrement + 2), 16) * getRandomDirection();
-            let nextSeedY = parseInt(md5Hash.substring(seedIncrement + 2, seedIncrement + 4), 16) * getRandomDirection();
+            let nextSeedX = parseInt(md5Hash.substring(seedIncrement, seedIncrement + 2), 16) * getRandomDirectionByHash(md5Hash, fibonacciSequence[directionIncrement++]);
+            let nextSeedY = parseInt(md5Hash.substring(seedIncrement + 2, seedIncrement + 4), 16) * getRandomDirectionByHash(md5Hash, fibonacciSequence[directionIncrement++]);
             let directionX = originX + nextSeedX;
             let directionY = originY + nextSeedY;
 
