@@ -8,6 +8,7 @@ node_modules/
 
 # blogs (temporary)
 src/pages/posts/ideas.md
+src/pages/posts/unpublished/*
 
 # logs
 npm-debug.log*
