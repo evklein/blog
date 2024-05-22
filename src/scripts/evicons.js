@@ -200,6 +200,13 @@ function runPerlinAnimation(seed, ctx, imageData, canvasPxWidth, canvasPxHeight,
         rotateGradientVectors(gradientVectors);
         drawPerlin(imageData, gradientVectors, colors, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight);
         ctx.putImageData(imageData, 0, 0);
+        for (const [key, value] of Object.entries(gradientVectors)) {
+            let pos = key.split(':');
+            ctx.beginPath(); // Start a new path
+            ctx.moveTo(pos[0] * gridSegmentPxWidth, pos[1] * gridSegmentPxHeight); // Move the pen to (30, 50)
+            ctx.lineTo((pos[0] * gridSegmentPxWidth + value.endX) * 10, (pos[1] * gridSegmentPxHeight + value.endY) * 10); // Draw a line to (150, 100)
+            ctx.stroke(); // Render the path
+        }
     }, 100);
 
     return [intervalId, hash, colors, gradientVectors];
