@@ -10,39 +10,95 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <p>
             Evicons take an input string and convert it to an MD5 hash which is used to build the animation. Each evicon is cryptographically unique for its input.
         </p>
-        <p>You'll see evicons being used around this site for identifying pieces of information like blog posts and projects. I encourage you to mess around and create your own below!</p>
+        <p>You'll see evicons being used around this site for identifying pieces of information like blog posts and projects. You can experiment with creating your own below.</p>
     </div>
-    <div>
-        <input id="evicon-text-input" type="text">
-        <canvas id="evicon" class="evicon" width="150" height="150"></canvas>
+    <div class="evicon-demo-section">
+        <div id="evicon-text-input-section">
+            <i id="edit-icon" class="fa-solid fa-pencil"></i>
+            <input id="evicon-text-input" type="text" value="Type something here">
+            <div id="evicon-demo-section-details">
+                <p id="hash"></p>
+                <p id="primary-color">Primary Color: </p>
+                <p id="secondary-color">Secondary Color: </p>
+                <p id="gradient-vectors"></p>
+            </div>
+        </div>
+        <canvas style="height: 150px !important" id="evicon" class="evicon" width="150" height="150"></canvas>
     </div>
 </BaseLayout>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js" defer></script>
+<script src="/src/scripts/evicons.js" defer></script>
 <script defer>
+    var intervalId = undefined;
+    var colors;
+    var hash;
+    var gradientVectors;
+
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof CryptoJS === 'undefined') {
             console.error('CryptoJS is not loaded');
         } else {
-            console.log('CryptoJS loaded successfully');
-            const script = document.createElement('script');
-            script.id = "evicon-script";
-            script.src = '../src/scripts/evicons.js';
-            document.body.appendChild(script);
-
             document.getElementById('evicon-text-input').addEventListener('input', changeInputText);
+            document.getElementById('evicon-text-input').addEventListener('focus', highlightEditIcon);
+            document.getElementById('evicon-text-input').addEventListener('focusout', unhighlightEditIcon);
+            var renderResults = renderEvicon('Type something here');
+            intervalId = renderResults[0];
+            hash = renderResults[1];
+            colors = renderResults[2];
+            gradientVectors = renderResults[3];
+            document.querySelector('p#hash').innerHTML = ``;
+            document.querySelector('p#hash').innerHTML = `<b>MD5 Hash:</b> <i>${hash}</i>`;
+            document.querySelector('p#primary-color').innerHTML = `<b>Primary Color:</b> RGB(${colors.primaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.primaryColor}); display: inline-block; border-radius: 10px;">`;
+            document.querySelector('p#secondary-color').innerHTML = `<b>Secondary Color:</b> RGB(${colors.secondaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.secondaryColor}); display: inline-block; border-radius: 10px;">`;
+                let readableGradientVectors = '';
+            console.log(gradientVectors);
+            console.log(gradientVectors.length);
+            for (const [_, value] of Object.entries(gradientVectors)) {
+                console.log(value);
+                readableGradientVectors += `[${Math.trunc(value.endX * 100) / 100}, ${value.endY.toFixed(2)}]; `;
+            }
+            console.log(readableGradientVectors);
+            document.querySelector('p#gradient-vectors').innerHTML = `<b>Initial Gradient Vectors:</b> ${readableGradientVectors}`;
+
         }
     });
 
-    var intervalId = undefined;
     function changeInputText(event) {
         if (intervalId) {
             stopRenderingEvicon(intervalId);
             intervalId = undefined;
         }
-        if (event.target.value) {
-            intervalId = renderEvicon(event.target.value);
-        }
+        var renderResults = renderEvicon(event.target.value);
+            intervalId = renderResults[0];
+            hash = renderResults[1];
+            colors = renderResults[2];
+            gradientVectors = renderResults[3];
+            document.querySelector('p#hash').innerHTML = ``;
+            document.querySelector('p#hash').innerHTML = `<b>MD5 Hash:</b> <i>${hash}</i>`;
+            document.querySelector('p#primary-color').innerHTML = `<b>Primary Color:</b> RGB(${colors.primaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.primaryColor}); display: inline-block; border-radius: 10px;">`;
+            document.querySelector('p#secondary-color').innerHTML = `<b>Secondary Color:</b> RGB(${colors.secondaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.secondaryColor}); display: inline-block; border-radius: 10px;">`;
+            let readableGradientVectors = '';
+            console.log(gradientVectors);
+            console.log(gradientVectors.length);
+            for (const [_, value] of Object.entries(gradientVectors)) {
+                console.log(value.endX.toFixed(2));
+                console.log('AHAHHAHAH');
+                readableGradientVectors += `[${Number(value.endX).toFixed(2)}, ${value.endY}]; `;
+            }
+            console.log(readableGradientVectors);
+            document.querySelector('p#gradient-vectors').innerHTML = `<b>Initial Gradient Vectors:</b> ${readableGradientVectors}`;
+
+    }
+
+    function highlightEditIcon() {
+        document.querySelector('i#edit-icon').style.color = '#42bfa0';
+        document.getElementById('evicon-text-input').style.borderColor = '#42bfa0';
+    }
+
+    function unhighlightEditIcon() {
+        document.querySelector('i#edit-icon').style.color = 'black';
+        document.getElementById('evicon-text-input').style.borderColor = '#888';
     }
 </script>
 <style>
@@ -56,5 +112,51 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     .site-about {
         margin-top: 5rem;
+    }
+
+    #edit-icon {
+        position: relative;
+        left: 50px;
+        top: 42px;
+    }
+
+    .evicon-demo-section {
+        display: flex;
+        width: 100%
+    }
+    
+    #evicon-text-input-section {
+        width: 70%;
+        margin: auto 7%;
+    }
+
+    #evicon-text-input {
+        height: 60px;
+        width: 100%;
+        background: transparent;
+        border: 2px solid #888;
+        border-radius: 8px;
+        font-size: 18px;
+        font-family: 'Lato';
+        font-weight: bold;
+        margin: auto 5%;;
+        padding: 15px 45px;
+    }
+
+    #evicon {
+        border-radius: 20px;
+        border: 2px solid #ddd;
+    }
+
+
+    #evicon-demo-section-details {
+        margin-top: 15px;
+        margin-left: 5%;
+        line-height: 8px;
+    }
+    #evicon-demo-section-details > p {
+        font-size: 14px;
+        margin: 6px 15px;
+        line-height: 20px;
     }
 </style>

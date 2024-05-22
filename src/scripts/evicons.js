@@ -1,7 +1,7 @@
 
 
 const NUMBER_OF_SEGMENTS = 3;
-const TIME_INCREMENT = 0.25;
+const TIME_INCREMENT = 0.1;
 
 function seedColors(input) {
     const md5Hash = CryptoJS.MD5(input).toString();
@@ -192,13 +192,17 @@ function drawPerlin(imageData, gradientVectors, colors, canvasPxWidth, canvasPxH
 
 function runPerlinAnimation(seed, ctx, imageData, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight) {
     // Shared variables
-    var gradientVectors = buildGradientVectors(seed, gridSegmentPxWidth, gridSegmentPxHeight);
+    var hash = CryptoJS.MD5(seed).toString();
+    console.log('seed: ' + seed + ' hash: ' + hash);
     var colors = seedColors(seed);
-    return setInterval(() => {
+    var gradientVectors = buildGradientVectors(seed, gridSegmentPxWidth, gridSegmentPxHeight);
+    var intervalId = setInterval(() => {
         rotateGradientVectors(gradientVectors);
         drawPerlin(imageData, gradientVectors, colors, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight);
         ctx.putImageData(imageData, 0, 0);
     }, 100);
+
+    return [intervalId, hash, colors, gradientVectors];
 }
 
 function renderEvicon(seed) {
