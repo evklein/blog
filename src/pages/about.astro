@@ -1,19 +1,54 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 const emailAddress: string = "not.real@todothisemaillater.org";
 ---
+
 <BaseLayout pageTitle="About">
     <div class="main-about">
         <h1>About Me</h1>
-        <p>I'm a software engineer. I grew up in Indianapolis, and I still live here. I started programming in 2014, and I graduated from Purdue University with my BS in computer science in 2020 (I also minored in classical music histroy & theory, which I love talking about).</p>
-        <p>I've worked professionally as a software engineer since June 2020. I've worked in a number of different sectors, including agriculture, insurance, consulting, and energy.</p>
-        <p>This site is my home base for documenting my resume, thoughts, projects, and more. If you'd like to reach out, you can contact me at <b>{emailAddress}</b>.</p>
+        <p>
+            I'm a <b class="highlight">software engineer</b>. I grew up in
+            Indianapolis, and I'm still here. I started programming in 2014, and
+            I graduated from <b class="highlight">Purdue University</b> with my BS
+            in computer science in 2020 (I also minored in <b class="highlight"
+                >classical music history & theory</b
+            >, which I love talking about).
+        </p>
+        <p>
+            I've worked professionally as a software engineer since <b
+                class="highlight">June 2020</b
+            >. I've worked in a number of different sectors, including
+            agriculture, insurance, consulting, and energy.
+        </p>
+        <p>
+            Starting in Fall 2024 I'll be headed back to school at <b
+                class="highlight">Indiana University</b
+            > to earn my <b class="highlight">Masters in Data Science</b> degree. I hope
+            to use what I learn to become great at gluing together the domains of
+            software engineering and data science.
+        </p>
+        <p>
+            This site is my home base for documenting my resume, thoughts,
+            projects, and more. If you'd like to reach out, you can contact me
+            at <b>{emailAddress}</b>.
+        </p>
     </div>
     <div class="site-about">
         <hr />
         <h2>About This Site</h2>
-        <p>This site is built with <a href="https://astro.build/">Astro</a>, which is a <b>great</b> web technology, in my opinion. Some of the components are written with <a href="https://react.dev/">React</a>, where I need to do some client-side stuff.</p>
-        <p>The site is hosted <a href="/TODO">here</a>. The source code can be found on <a href="https://github.com/evklein/blog">my Github</a>.</p>
+        <p>
+            This site is built with <a href="https://astro.build/">Astro</a>,
+            which is a <b>great</b> web technology, in my opinion. Some of the components
+            are written with <a href="https://react.dev/">React</a>, where I
+            need to do some client-side stuff. Also lots of vanilla JS floating
+            around. Kinda of a mess, ngl.
+        </p>
+        <p>
+            The site is hosted in an static web application provided by Azure
+            (free tier). The source code can be found on <a
+                href="https://github.com/evklein/blog">my Github</a
+            >.
+        </p>
     </div>
 </BaseLayout>
 <style>
@@ -25,6 +60,9 @@ const emailAddress: string = "not.real@todothisemaillater.org";
         font-size: 14pt;
     }
 
+    .highlight {
+        color: #42bfa0;
+    }
     .site-about {
         margin-top: 5rem;
     }

@@ -1,15 +1,11 @@
 ---
+layout: ../../layouts/MarkdownPostLayout.astro
 title: 'An annoying quirk of Copilot and how to quickly get around it'
-pubDate: 2024-05-22
-description: 'This is the first post of my new Astro blog.'
-author: 'Astro Learner'
-image:
-    url: 'https://docs.astro.build/assets/full-logo-light.png'
-    alt: 'The full Astro logo.'
+pubDate: 2024-05-23
+description: ''
 tags: ["astro", "blogging", "learning in public"]
 ---
-
-Sometimes when GPT is down I'll default to Copilot for more 'generic' requests. Copilot has more guardrails on it, making it really only useful for software development work, so sometimes you'll get something like this:
+Sometimes when ChatGPT is down I'll resort to using Copilot for more 'generic' requests. Copilot has more guardrails around it, making it impractical for any work that isn't software development, so sometimes you'll run into something like this:
 
 ![alt text](image-1.png)
 

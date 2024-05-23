@@ -156,3 +156,14 @@ h1 {
         display: none;
     }
 }
+
+a {
+    text-decoration: none;
+    color: #129f90;
+    cursor: pointer;
+}
+
+a:hover {
+    color: #007f70;
+    font-weight: bold;
+}
