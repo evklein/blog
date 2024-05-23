@@ -5,7 +5,6 @@ const TIME_INCREMENT = 0.01;
 
 function seedColors(input) {
     const md5Hash = CryptoJS.MD5(input).toString();
-    console.log(md5Hash);
     let primaryColor = [parseInt(md5Hash.substring(0, 2), 16), parseInt(md5Hash.substring(2, 4), 16), parseInt(md5Hash.substring(4, 6), 16)];
     let secondaryColor = [parseInt(md5Hash.substring(6, 8), 16), parseInt(md5Hash.substring(8, 10), 16), parseInt(md5Hash.substring(10, 12), 16)];
     return { primaryColor, secondaryColor };
@@ -277,7 +276,6 @@ function renderAllEviconsOnPage() {
     var contexts = [];
     var imageDatas = [];
     for (var i = 0; i < canvases.length; i++) {
-        console.log(canvases[i].width)
         var canvas = canvases[i];
         let canvasPxWidth = canvas.width;
         let canvasPxHeight = canvas.height;

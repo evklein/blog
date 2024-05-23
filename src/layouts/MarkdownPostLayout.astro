@@ -4,8 +4,11 @@ const { frontmatter } = Astro.props;
 ---
 
 <BaseLayout pageTitle={frontmatter.title}>
+    <br />
     <div id="top-info">
-        <canvas class="evicon" id={frontmatter.title} width="25" height="25"></canvas>
+        <a href="/evicons" title="What is this smudge?">
+            <canvas id={frontmatter.title} class="evicon" width="25" height="25"></canvas>
+        </a>
         <p class="date">
             {
                 new Date(frontmatter.pubDate.slice(0, 10)).toLocaleDateString(
@@ -40,27 +43,8 @@ const { frontmatter } = Astro.props;
         font-style: italic;
     }
 </style>
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js"
-    defer></script>
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"
-    defer></script>
-
-<script src="/src/scripts/evicons.js" defer></script>
-
+<script type="module" src="../src/scripts/evicons-loader.js"></script>
 <script defer>
-    document.addEventListener("DOMContentLoaded", () => {
-        console.log(typeof renderAllEviconsOnPage);
-        if (
-            typeof CryptoJS === "undefined" ||
-            typeof renderAllEviconsOnPage === "undefined"
-        ) {
-            console.error("CryptoJS is not loaded");
-        } else {
-            renderAllEviconsOnPage();
-        }
-    });
     const MAX_IMAGE_WIDTH_PX = 850;
     let images = document.getElementsByTagName("img");
     for (let i = 0; i < images.length; i++) {

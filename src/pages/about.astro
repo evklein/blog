@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-const emailAddress: string = "not.real@todothisemaillater.org";
 ---
 <BaseLayout pageTitle="About">
     <div class="main-about">
@@ -29,7 +28,7 @@ const emailAddress: string = "not.real@todothisemaillater.org";
         <p>
             This site is my home base for documenting my resume, thoughts,
             projects, and more. If you'd like to reach out, you can contact me
-            at <b>{emailAddress}</b>.
+            at <b id="email-section"></b>.
         </p>
     </div>
     <div class="site-about">
@@ -50,6 +49,15 @@ const emailAddress: string = "not.real@todothisemaillater.org";
         </p>
     </div>
 </BaseLayout>
+<script>
+    addEventListener("DOMContentLoaded", (_) => {
+        console.log('what!');
+        let emailSection = document.getElementById('email-section');
+        if (emailSection) {
+            emailSection.innerText = 'eklein217@gmail.com';
+        }
+    });
+</script>
 <style>
     .main-about {
         width: 700px;

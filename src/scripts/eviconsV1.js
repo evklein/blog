@@ -3,15 +3,12 @@
 const NUMBER_OF_SEGMENTS = 3;
 const TIME_INCREMENT = 0.01;
 
-function seedColors(input) {
-    const md5Hash = CryptoJS.MD5(input).toString();
-    console.log(md5Hash);
-    let primaryColor = [parseInt(md5Hash.substring(0, 2), 16), parseInt(md5Hash.substring(2, 4), 16), parseInt(md5Hash.substring(4, 6), 16)];
-    let secondaryColor = [parseInt(md5Hash.substring(6, 8), 16), parseInt(md5Hash.substring(8, 10), 16), parseInt(md5Hash.substring(10, 12), 16)];
+function seedColors(hash) {
+    let primaryColor = [parseInt(hash.substring(0, 2), 16), parseInt(hash.substring(2, 4), 16), parseInt(hash.substring(4, 6), 16)];
+    let secondaryColor = [parseInt(hash.substring(6, 8), 16), parseInt(hash.substring(8, 10), 16), parseInt(hash.substring(10, 12), 16)];
     return { primaryColor, secondaryColor };
 }
 
-// Set pixel data (RGBA)
 function setPixel(i, x, y, r, g, b) {
     const index = (y * i.width + x) * 4;
     i.data[index] = r;     // Red
@@ -20,14 +17,16 @@ function setPixel(i, x, y, r, g, b) {
     i.data[index + 3] = 255; // Alpha
 }
 
-function drawGrid(imageData) {
-    for (let y = 0; y <= canvasPxHeight; y++) {
-        for (let x = 0; x <= canvasPxWidth; x++) {
+function drawGrid(imageData, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight) {
+    for (let y = 0; y < canvasPxHeight; y++) {
+        for (let x = 0; x < canvasPxWidth; x++) {
+            if (x === 0 || y === 0) continue;
+            
             if (x % gridSegmentPxWidth === 0) {
-                setPixel(imageData, x, y, 175, 255, 255, true);
+                setPixel(imageData, x, y, 255, 0, 0);
             }
             if (y % gridSegmentPxHeight === 0) {
-                setPixel(imageData, x, y, 175, 255, 255, true);
+                setPixel(imageData, x, y, 255, 0, 0);
             }
         }
     }
@@ -51,9 +50,8 @@ function getRandomDirectionByHash(hash, index) {
     return parseInt(hash[index], 16) < 8 ? -1 : 1;
 }
 
-function buildGradientVectors(seed, gridSegmentPxWidth, gridSegmentPxHeight) {
+function buildGradientVectors(hash, gridSegmentPxWidth, gridSegmentPxHeight) {
     let gradientVectors = [];
-    const md5Hash = CryptoJS.MD5(seed).toString();
     const fibonacciSequence = getFibonacciSequence();
 
     let seedIncrement = 0;
@@ -62,8 +60,8 @@ function buildGradientVectors(seed, gridSegmentPxWidth, gridSegmentPxHeight) {
         for (let x = 0; x <= NUMBER_OF_SEGMENTS; x++) {
             let originX = x * gridSegmentPxWidth;
             let originY = y * gridSegmentPxHeight;
-            let nextSeedX = parseInt(md5Hash.substring(seedIncrement, seedIncrement + 2), 16) * getRandomDirectionByHash(md5Hash, fibonacciSequence[directionIncrement++]);
-            let nextSeedY = parseInt(md5Hash.substring(seedIncrement + 2, seedIncrement + 4), 16) * getRandomDirectionByHash(md5Hash, fibonacciSequence[directionIncrement++]);
+            let nextSeedX = parseInt(hash.substring(seedIncrement, seedIncrement + 2), 16) * getRandomDirectionByHash(hash, fibonacciSequence[directionIncrement++]);
+            let nextSeedY = parseInt(hash.substring(seedIncrement + 2, seedIncrement + 4), 16) * getRandomDirectionByHash(hash, fibonacciSequence[directionIncrement++]);
             let directionX = originX + nextSeedX;
             let directionY = originY + nextSeedY;
 
@@ -84,7 +82,7 @@ function buildGradientVectors(seed, gridSegmentPxWidth, gridSegmentPxHeight) {
 
             gradientVectors[`${x}:${y}`] = newVector;
             seedIncrement += 2;
-            if (seedIncrement >= md5Hash.length - 4) {
+            if (seedIncrement >= hash.length - 2) {
                 seedIncrement = 0;
             }
         }
@@ -93,7 +91,7 @@ function buildGradientVectors(seed, gridSegmentPxWidth, gridSegmentPxHeight) {
     return gradientVectors;
 }
 
-function perlinAtPosition(x, y, imageData, gradientVectors, colors, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight) {
+function drawPerlinAtPosition(x, y, imageData, gradientVectors, colors, gridSegmentPxWidth, gridSegmentPxHeight) {
     // Find grid segment
     var gridSegmentX = Math.floor(x / gridSegmentPxWidth);
     var gridSegmentY = Math.floor(y / gridSegmentPxHeight);
@@ -149,23 +147,21 @@ function perlinAtPosition(x, y, imageData, gradientVectors, colors, canvasPxWidt
     setPixel(imageData, x, y, color[0], color[1], color[2], true);
 }
 
-// Smoothstep function for interpolation
-function smoothstep(t) {
-return t * t * t * (t * (t * 6 - 15) + 10);
+function interpolateDotProducts(a, b, t) {
+    return a + smoothstep(t) * (b - a);
 }
 
-
-function interpolateDotProducts(a, b, t) {
-return a + smoothstep(t) * (b - a);
+function smoothstep(t) {
+    return t * t * t * (t * (t * 6 - 15) + 10);
 }
 
 function interpolateColor(color1, color2, factor) {
-const result = color1.slice();
-for (let i = 0; i < 3; i++) {
-    result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
-}
-return result;
-}
+    const result = color1.slice();
+    for (let i = 0; i < 3; i++) {
+        result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+    }
+    return result;
+    }
 
 function rotateGradientVectors(gradientVectors) {
     for (let y = 0; y <= NUMBER_OF_SEGMENTS; y++) {
@@ -185,79 +181,85 @@ function rotateGradientVectors(gradientVectors) {
 function drawPerlin(imageData, gradientVectors, colors, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight) {
     for (var y = 0; y  < canvasPxHeight; y++) {
         for (var x = 0; x < canvasPxWidth; x++) {
-            perlinAtPosition(x, y, imageData, gradientVectors, colors, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight);
+            drawPerlinAtPosition(x, y, imageData, gradientVectors, colors, gridSegmentPxWidth, gridSegmentPxHeight);
         }
     }
 }
 
-function runPerlinAnimation(seed, ctx, imageData, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight, showGradientVectors) {
+function runPerlinAnimation(hash, ctx, imageData, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight, displayGradientVectors, displayGrid) {
     // Shared variables
-    var hash = CryptoJS.MD5(seed).toString();
-    var colors = seedColors(seed);
-    let gradientVectors = buildGradientVectors(seed, gridSegmentPxWidth, gridSegmentPxHeight);
+    var colors = seedColors(hash);
+    let gradientVectors = buildGradientVectors(hash, gridSegmentPxWidth, gridSegmentPxHeight);
     
     var intervalId = setInterval(() => {
         rotateGradientVectors(gradientVectors);
         drawPerlin(imageData, gradientVectors, colors, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight);
+
+        if (displayGrid) {
+            drawGrid(imageData, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight);
+        }
+
         ctx.putImageData(imageData, 0, 0);
     
-        if (showGradientVectors) {
-            for (const [key, value] of Object.entries(gradientVectors)) {
-                let pos = key.split(':');
-                let originX = pos[0] * gridSegmentPxWidth;
-                let originY = pos[1] * gridSegmentPxHeight;
-            
-                ctx.beginPath(); // Start a new path
-                ctx.moveTo(originX, originY);
-            
-                let radius = canvasPxWidth / 5; // Length of the line
-                let vectorLength = Math.sqrt(value.i * value.i + value.j * value.j);
-                let normalizedI = value.i / vectorLength;
-                let normalizedJ = value.j / vectorLength;
-                let adjacent = radius * normalizedI;
-                let opposite = radius * normalizedJ;
-            
-                let endX = originX + adjacent;
-                let endY = originY + opposite;
-            
-                ctx.lineTo(endX, endY); // Draw the line to the new point
-            
-                ctx.strokeStyle = 'red'; // Set the line color to red
-                ctx.lineWidth = 2; // Set the line width to 3 pixels
-                ctx.stroke();
-            
-                // Draw arrowhead
-                let arrowLength = 10;
-                let arrowAngle = Math.PI / 6; // 30 degrees
-            
-                let angle = Math.atan2(opposite, adjacent);
-                
-                // Left arrow line
-                ctx.beginPath();
-                ctx.moveTo(endX, endY);
-                ctx.lineTo(
-                    endX - arrowLength * Math.cos(angle - arrowAngle),
-                    endY - arrowLength * Math.sin(angle - arrowAngle)
-                );
-                ctx.stroke();
-            
-                // Right arrow line
-                ctx.beginPath();
-                ctx.moveTo(endX, endY);
-                ctx.lineTo(
-                    endX - arrowLength * Math.cos(angle + arrowAngle),
-                    endY - arrowLength * Math.sin(angle + arrowAngle)
-                );
-                ctx.stroke();
-            
-            }
+        if (displayGradientVectors) {
+            renderGradientVectors(gradientVectors, gridSegmentPxWidth, gridSegmentPxHeight, ctx, canvasPxWidth / 5);
         }
     }, 1);
 
     return [intervalId, hash, colors, gradientVectors];
 }
 
-function renderEvicon(seed, showGradientVectors) {
+function renderGradientVectors(gradientVectors, gridSegmentPxWidth, gridSegmentPxHeight, ctx, radius) {
+    for (const [key, value] of Object.entries(gradientVectors)) {
+        let pos = key.split(':');
+        let originX = pos[0] * gridSegmentPxWidth;
+        let originY = pos[1] * gridSegmentPxHeight;
+    
+        ctx.beginPath(); // Start a new path
+        ctx.moveTo(originX, originY);
+    
+        let vectorLength = Math.sqrt(value.i * value.i + value.j * value.j);
+        let normalizedI = value.i / vectorLength;
+        let normalizedJ = value.j / vectorLength;
+        let adjacent = radius * normalizedI;
+        let opposite = radius * normalizedJ;
+    
+        let endX = originX + adjacent;
+        let endY = originY + opposite;
+    
+        ctx.lineTo(endX, endY); // Draw the line to the new point
+    
+        ctx.strokeStyle = 'red'; // Set the line color to red
+        ctx.lineWidth = 2; // Set the line width to 3 pixels
+        ctx.stroke();
+    
+        // Draw arrowhead
+        let arrowLength = 10;
+        let arrowAngle = Math.PI / 6; // 30 degrees
+    
+        let angle = Math.atan2(opposite, adjacent);
+        
+        // Left arrow line
+        ctx.beginPath();
+        ctx.moveTo(endX, endY);
+        ctx.lineTo(
+            endX - arrowLength * Math.cos(angle - arrowAngle),
+            endY - arrowLength * Math.sin(angle - arrowAngle)
+        );
+        ctx.stroke();
+    
+        // Right arrow line
+        ctx.beginPath();
+        ctx.moveTo(endX, endY);
+        ctx.lineTo(
+            endX - arrowLength * Math.cos(angle + arrowAngle),
+            endY - arrowLength * Math.sin(angle + arrowAngle)
+        );
+        ctx.stroke();
+    }
+}
+
+export function renderEvicon(seed, displayGradientVectors, displayGrid) {
     var canvas = document.querySelector('canvas.evicon');
     let canvasPxWidth = canvas.width;
     let canvasPxHeight = canvas.height;
@@ -265,19 +267,19 @@ function renderEvicon(seed, showGradientVectors) {
     let gridSegmentPxHeight = canvasPxHeight / NUMBER_OF_SEGMENTS;
     var context = canvas.getContext('2d');
     let imageData= context?.createImageData(canvas.width, canvas.height);
-    return runPerlinAnimation(seed, context, imageData, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight, showGradientVectors);
+    let hash = CryptoJS.MD5(seed).toString();
+    return runPerlinAnimation(hash, context, imageData, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight, displayGradientVectors, displayGrid);
 }
 
-function stopRenderingEvicon(intervalId) {
+export function stopRenderingEvicon(intervalId) {
     clearInterval(intervalId);
 }
 
-function renderAllEviconsOnPage() {
+export function renderAllEviconsOnPage() {
     var canvases = document.querySelectorAll('canvas.evicon');
     var contexts = [];
     var imageDatas = [];
     for (var i = 0; i < canvases.length; i++) {
-        console.log(canvases[i].width)
         var canvas = canvases[i];
         let canvasPxWidth = canvas.width;
         let canvasPxHeight = canvas.height;
@@ -286,6 +288,7 @@ function renderAllEviconsOnPage() {
         var ctx = canvas.getContext('2d');
         contexts[i] = ctx;
         imageDatas[i] = ctx?.createImageData(canvas.width, canvas.height);
-        runPerlinAnimation(canvas.id, contexts[i], imageDatas[i], canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight);
+        let hash = CryptoJS.MD5(canvas.id).toString();
+        runPerlinAnimation(hash, contexts[i], imageDatas[i], canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, gridSegmentPxHeight);
     }
 }

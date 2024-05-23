@@ -5,7 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="evicon-about">
         <h1>Evicons</h1>
         <p>
-            <b>Evicons</b> are a type of <a href="">identicon</a>, created by myself, and inspired by the famous <a href="">Github identicons.</a> Unlike Github identicons (or some other identicons like <a href="">Gravatars</a>), evicons are animated using <a href="">Perlin noise</a>.
+            <b>Evicons</b> are a type of <a href="https://en.wikipedia.org/wiki/Identicon">identicon</a>, created by myself, and inspired by the famous <a href="https://github.blog/2013-08-14-identicons/">Github identicons.</a> Unlike Github identicons (or some other identicons like <a href="https://support.gravatar.com/basic/what-is-gravatar/">Gravatars</a>), evicons are animated using <a href="https://en.wikipedia.org/wiki/Perlin_noise#:~:text=Perlin%20noise%20is%20a%20type,the%20creation%20of%20image%20textures.">Perlin noise</a>.
         </p>
         <p>
             Evicons take an input string and convert it to an MD5 hash which is used to build the animation. Each evicon is cryptographically unique for its input.
@@ -26,23 +26,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div>
             <canvas style="height: 150px !important;" id="evicon" class="evicon" width="150" height="150"></canvas>
             <br />
-            <div id="display-vectors-section">
-                <input type="checkbox" name="showVectors" id="show-vectors-checkbox">
-                <label for="showVectors">Display vectors</label>
+            <div id="display-section">
+                <div class="checkbox-container">
+                    <input type="checkbox" name="showVectors" id="show-vectors-checkbox">
+                    <label for="showVectors">Display vectors</label>
+                </div>
+                <div>
+                    <input type="checkbox" name="showGrid" id="show-grid-checkbox">
+                    <label for="showGrid">Display grid</label>
+                </div>
             </div>
         </div>
     </div>
 </BaseLayout>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js" defer></script>
-<script src="/src/scripts/evicons.js" defer></script>
-<script defer>
+<!-- <script src="/src/scripts/eviconsV1.js" defer></script> -->
+<script type="module" defer>
+    import * as eviconsV1 from "/src/scripts/eviconsV1.js";
     var intervalId = undefined;
     var colors;
     var hash;
     var gradientVectors;
     var seed = 'Type something here';
     var displayVectors = false;
+    var displayGrid = false;
 
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof CryptoJS === 'undefined') {
@@ -52,6 +58,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             document.getElementById('evicon-text-input').addEventListener('focus', highlightEditIcon);
             document.getElementById('evicon-text-input').addEventListener('focusout', unhighlightEditIcon);
             document.getElementById('show-vectors-checkbox').addEventListener('change', toggleVectorVisibility);
+            document.getElementById('show-grid-checkbox').addEventListener('change', toggleGridVisibility);
             
             createEvicon();
             buildDetails();
@@ -74,7 +81,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     function stopEviconIfExists() {
         if (intervalId) {
-            stopRenderingEvicon(intervalId);
+            eviconsV1.stopRenderingEvicon(intervalId);
             intervalId = undefined;
         }
     }
@@ -99,7 +106,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     function createEvicon() {
-        var renderResults = renderEvicon(seed, displayVectors);
+        var renderResults = eviconsV1.renderEvicon(seed, displayVectors, displayGrid);
 
         intervalId = renderResults[0];
         hash = renderResults[1];
@@ -112,17 +119,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         displayVectors = event.target.checked;
         createEvicon();
     }
+
+    function toggleGridVisibility(event) {
+        stopEviconIfExists();
+        displayGrid = event.target.checked;
+        createEvicon();
+    }
 </script>
 <style>
-    .main-about {
-        width: 700px;
-    }
-
     label {
         font-size: 14px;
-    }
-    p {
-        font-size: 14pt;
     }
 
     .site-about {
@@ -175,7 +181,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         line-height: 20px;
     }
 
-    #display-vectors-section {
-        text-align: center;
+    #display-section {
+        text-align: left;
+        margin-left: 15px;
     }
 </style>
