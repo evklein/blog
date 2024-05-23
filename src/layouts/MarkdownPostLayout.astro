@@ -4,29 +4,63 @@ const { frontmatter } = Astro.props;
 ---
 
 <BaseLayout pageTitle={frontmatter.title}>
-    <p class="date">
-        {
-            new Date(frontmatter.pubDate.slice(0, 10)).toLocaleDateString(
-                "en-us",
-                {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                },
-            )
-        }
-    </p>
+    <div id="top-info">
+        <canvas class="evicon" id="hm" width="25" height="25"></canvas>
+        <p class="date">
+            {
+                new Date(frontmatter.pubDate.slice(0, 10)).toLocaleDateString(
+                    "en-us",
+                    {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                    },
+                )
+            }
+        </p>
+    </div>
     <p><em>{frontmatter.description}</em></p>
     <slot />
 </BaseLayout>
 <style>
+    #top-info {
+        display: flex;
+        margin-top: 25px;
+    }
+    canvas {
+        margin-left: 10px;
+        margin-top: -3px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+    }
     .date {
         font-size: 14px;
+        margin: 0 7px;
         font-style: italic;
     }
 </style>
-<script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js"
+    defer></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"
+    defer></script>
+
+<script src="/src/scripts/evicons.js" defer></script>
+
+<script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log(typeof renderAllEviconsOnPage);
+        if (
+            typeof CryptoJS === "undefined" ||
+            typeof renderAllEviconsOnPage === "undefined"
+        ) {
+            console.error("CryptoJS is not loaded");
+        } else {
+            renderAllEviconsOnPage();
+        }
+    });
     const MAX_IMAGE_WIDTH_PX = 850;
     let images = document.getElementsByTagName("img");
     for (let i = 0; i < images.length; i++) {
