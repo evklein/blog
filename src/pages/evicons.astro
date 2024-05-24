@@ -1,21 +1,45 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
+
 <BaseLayout pageTitle="Evicons">
     <div class="evicon-about">
         <h1>Evicons</h1>
         <p>
-            <b>Evicons</b> are a type of <a href="https://en.wikipedia.org/wiki/Identicon">identicon</a>, created by myself, and inspired by the famous <a href="https://github.blog/2013-08-14-identicons/">Github identicons.</a> Unlike Github identicons (or some other identicons like <a href="https://support.gravatar.com/basic/what-is-gravatar/">Gravatars</a>), evicons are animated using <a href="https://en.wikipedia.org/wiki/Perlin_noise#:~:text=Perlin%20noise%20is%20a%20type,the%20creation%20of%20image%20textures.">Perlin noise</a>.
+            <b>Evicons</b> are a type of <a
+                href="https://en.wikipedia.org/wiki/Identicon">identicon</a
+            >, created by myself, and inspired by the famous <a
+                href="https://github.blog/2013-08-14-identicons/"
+                >Github identicons.</a
+            > Unlike Github identicons (or some other identicons like <a
+                href="https://support.gravatar.com/basic/what-is-gravatar/"
+                >Gravatars</a
+            >), evicons are animated using <a
+                href="https://en.wikipedia.org/wiki/Perlin_noise#:~:text=Perlin%20noise%20is%20a%20type,the%20creation%20of%20image%20textures."
+                >Perlin noise</a
+            >.
         </p>
         <p>
-            Evicons take an input string and convert it to an MD5 hash which is used to build the animation. Each evicon is cryptographically unique for its input.
+            Evicons take an input string and convert it to an MD5 hash which is
+            used to build the animation. Each evicon is cryptographically unique
+            for its input.
         </p>
-        <p>You'll see evicons being used around this site for identifying pieces of information like blog posts and projects. You can experiment with creating your own below.</p>
+        <p>
+            You'll see evicons being used around this site for identifying
+            pieces of information like blog posts and projects. If you want to
+            learn more about how they work, check out <a
+                href="/posts/identicons">the blog post</a
+            >. You can experiment with creating your own below.
+        </p>
     </div>
     <div class="evicon-demo-section">
         <div id="evicon-text-input-section">
             <i id="edit-icon" class="fa-solid fa-pencil"></i>
-            <input id="evicon-text-input" type="text" value="Type something here">
+            <input
+                id="evicon-text-input"
+                type="text"
+                value="Type something here"
+            />
             <div id="evicon-demo-section-details">
                 <p id="hash"></p>
                 <p id="primary-color"></p>
@@ -24,15 +48,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
         </div>
         <div>
-            <canvas style="height: 150px !important;" id="evicon" class="evicon" width="150" height="150"></canvas>
+            <canvas
+                style="height: 150px !important;"
+                id="evicon"
+                class="evicon"
+                width="150"
+                height="150"></canvas>
             <br />
             <div id="display-section">
                 <div class="checkbox-container">
-                    <input type="checkbox" name="showVectors" id="show-vectors-checkbox">
+                    <input
+                        type="checkbox"
+                        name="showVectors"
+                        id="show-vectors-checkbox"
+                    />
                     <label for="showVectors">Display vectors</label>
                 </div>
                 <div>
-                    <input type="checkbox" name="showGrid" id="show-grid-checkbox">
+                    <input
+                        type="checkbox"
+                        name="showGrid"
+                        id="show-grid-checkbox"
+                    />
                     <label for="showGrid">Display grid</label>
                 </div>
             </div>
@@ -46,37 +83,50 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     var colors;
     var hash;
     var gradientVectors;
-    var seed = 'Type something here';
+    var seed = "Type something here";
     var displayVectors = false;
     var displayGrid = false;
 
-    document.addEventListener('DOMContentLoaded', () => {
-        if (typeof CryptoJS === 'undefined') {
-            console.error('CryptoJS is not loaded');
+    document.addEventListener("DOMContentLoaded", () => {
+        if (typeof CryptoJS === "undefined") {
+            console.error("CryptoJS is not loaded");
         } else {
-            document.getElementById('evicon-text-input').addEventListener('input', changeInputText);
-            document.getElementById('evicon-text-input').addEventListener('focus', highlightEditIcon);
-            document.getElementById('evicon-text-input').addEventListener('focusout', unhighlightEditIcon);
-            document.getElementById('show-vectors-checkbox').addEventListener('change', toggleVectorVisibility);
-            document.getElementById('show-grid-checkbox').addEventListener('change', toggleGridVisibility);
-            
+            document
+                .getElementById("evicon-text-input")
+                .addEventListener("input", changeInputText);
+            document
+                .getElementById("evicon-text-input")
+                .addEventListener("focus", highlightEditIcon);
+            document
+                .getElementById("evicon-text-input")
+                .addEventListener("focusout", unhighlightEditIcon);
+            document
+                .getElementById("show-vectors-checkbox")
+                .addEventListener("change", toggleVectorVisibility);
+            document
+                .getElementById("show-grid-checkbox")
+                .addEventListener("change", toggleGridVisibility);
+
             createEvicon();
             buildDetails();
         }
     });
 
     function buildDetails() {
-        document.querySelector('p#hash').innerHTML = ``;
-            document.querySelector('p#hash').innerHTML = `<b>MD5 Hash:</b> <i>${hash}</i>`;
-            document.querySelector('p#primary-color').innerHTML = `<b>Primary Color:</b> RGB(${colors.primaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.primaryColor}); display: inline-block; border-radius: 10px;">`;
-            document.querySelector('p#secondary-color').innerHTML = `<b>Secondary Color:</b> RGB(${colors.secondaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.secondaryColor}); display: inline-block; border-radius: 10px;">`;
-            
-            let readableGradientVectors = '';
-            for (const [_, value] of Object.entries(gradientVectors)) {
-                readableGradientVectors += `[${value.i.toFixed(3)}, ${value.j.toFixed(3)}]; `;
-            }
-            document.querySelector('p#gradient-vectors').innerHTML = `<b>Initial Gradient Vectors:</b> ${readableGradientVectors}`;
+        document.querySelector("p#hash").innerHTML = ``;
+        document.querySelector("p#hash").innerHTML =
+            `<b>MD5 Hash:</b> <i>${hash}</i>`;
+        document.querySelector("p#primary-color").innerHTML =
+            `<b>Primary Color:</b> RGB(${colors.primaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.primaryColor}); display: inline-block; border-radius: 10px;">`;
+        document.querySelector("p#secondary-color").innerHTML =
+            `<b>Secondary Color:</b> RGB(${colors.secondaryColor}) <span style="width: 18px; height: 18px; background-color: rgb(${colors.secondaryColor}); display: inline-block; border-radius: 10px;">`;
 
+        let readableGradientVectors = "";
+        for (const [_, value] of Object.entries(gradientVectors)) {
+            readableGradientVectors += `[${value.i.toFixed(3)}, ${value.j.toFixed(3)}]; `;
+        }
+        document.querySelector("p#gradient-vectors").innerHTML =
+            `<b>Initial Gradient Vectors:</b> ${readableGradientVectors}`;
     }
 
     function stopEviconIfExists() {
@@ -95,18 +145,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     function highlightEditIcon() {
-        document.querySelector('i#edit-icon').style.color = '#42bfa0';
-        document.getElementById('evicon-text-input').style.outlineColor = '#42bfa0';
+        document.querySelector("i#edit-icon").style.color = "#42bfa0";
+        document.getElementById("evicon-text-input").style.outlineColor =
+            "#42bfa0";
         this.select();
     }
 
     function unhighlightEditIcon() {
-        document.querySelector('i#edit-icon').style.color = 'black';
-        document.getElementById('evicon-text-input').style.outlineColor = '#888';
+        document.querySelector("i#edit-icon").style.color = "black";
+        document.getElementById("evicon-text-input").style.outlineColor =
+            "#888";
     }
 
     function createEvicon() {
-        var renderResults = eviconsV1.renderEvicon(seed, displayVectors, displayGrid);
+        var renderResults = eviconsV1.renderEvicon(
+            seed,
+            displayVectors,
+            displayGrid,
+        );
 
         intervalId = renderResults[0];
         hash = renderResults[1];
@@ -143,9 +199,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     .evicon-demo-section {
         display: flex;
-        width: 100%
+        width: 100%;
     }
-    
+
     #evicon-text-input-section {
         width: 70%;
         margin: auto 7%;
@@ -158,9 +214,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         border: 2px solid #888;
         border-radius: 8px;
         font-size: 18px;
-        font-family: 'Lato';
+        font-family: "Lato";
         font-weight: bold;
-        margin: auto 5%;;
+        margin: auto 5%;
         padding: 15px 45px;
     }
 
@@ -168,7 +224,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         border-radius: 20px;
         border: 2px solid #ddd;
     }
-
 
     #evicon-demo-section-details {
         margin-top: 15px;

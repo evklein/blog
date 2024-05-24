@@ -13,8 +13,9 @@ const pageTitle = "My Astro Learning Blog";
     <div>
         {
             allPosts
-                .sort((p) => p.frontmatter.pubDate)
-                .reverse()
+                .sort(
+                    (a, b) => Number(new Date(b.frontmatter.pubDate)) - Number(new Date(a.frontmatter.pubDate))
+                )
                 .map((post, index) => (
                     <div
                         class={

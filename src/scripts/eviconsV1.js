@@ -24,9 +24,11 @@ function drawGrid(imageData, canvasPxWidth, canvasPxHeight, gridSegmentPxWidth, 
             
             if (x % gridSegmentPxWidth === 0) {
                 setPixel(imageData, x, y, 255, 0, 0);
+                setPixel(imageData, x + 1, y, 255, 0, 0);
             }
             if (y % gridSegmentPxHeight === 0) {
                 setPixel(imageData, x, y, 255, 0, 0);
+                setPixel(imageData, x, y + 1, 255, 0, 0);
             }
         }
     }
@@ -68,7 +70,6 @@ function buildGradientVectors(hash, gridSegmentPxWidth, gridSegmentPxHeight) {
             // Calculate the direction vector
             let dirX = directionX - originX;
             let dirY = directionY - originY;
-
 
             // Normalize the direction vector
             let length = Math.sqrt(dirX * dirX + dirY * dirY);
@@ -155,13 +156,13 @@ function smoothstep(t) {
     return t * t * t * (t * (t * 6 - 15) + 10);
 }
 
-function interpolateColor(color1, color2, factor) {
+function interpolateColor(color1, color2, perlinFactor) {
     const result = color1.slice();
     for (let i = 0; i < 3; i++) {
-        result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+        result[i] = Math.round(result[i] + perlinFactor * (color2[i] - color1[i]));
     }
     return result;
-    }
+}
 
 function rotateGradientVectors(gradientVectors) {
     for (let y = 0; y <= NUMBER_OF_SEGMENTS; y++) {
