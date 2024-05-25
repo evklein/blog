@@ -12,11 +12,11 @@ I like Github identicons. They're kind of charming, you know? Something simple t
 
 ![Alt text](image-3.png)
 
-I also like the idea of building my own identicons, so I decided to build something for this blog, to distinguish between pages, posts, or projects. You've probably seen them floating around on this site (there's one at the top of this post). I thought I'd document the process here.
+I also like the idea of building my own identicons, so I decided to build something for this blog, to distinguish between pages, posts, or projects. You've probably seen them floating around on this site (there's one at the top of this post). I'm pretty proud how they turned out and thought I'd document the process here.
 
 ## To each its own
 
-Github identicons are unique to their user, and are calculated via a cryptographic hash of the user's username (according to [this post](https://github.blog/2013-08-14-identicons/)). I like the cryptography aspect of this, but I think we can use the seed in a more interesting way, but I'll get to that. The point is, our identicons should be ***cryptographically distinct***, deterministic of their output. An Evicon should never be shared by the same seed. To accomplish this, we can do the same thing that Github does and pass the 'seed' value through a cryptographic hash function. We'll work with MD5 for this implementation.
+Github identicons are unique to their user, and are calculated via a cryptographic hash of the user's username (according to [this post](https://github.blog/2013-08-14-identicons/)). I like the cryptography aspect of this, but I think we can use the seed in a more interesting way, but I'll get to that. The point is, our identicons should be ***cryptographically distinct***, deterministic of their output. An Evicon should never be shared by the same seed. To accomplish this, we can do the same thing that Github does and pass the seed through a cryptographic hash function. We'll work with MD5 for this implementation.
 
 Fun fact: I learned that Github identicons only use the _first fifteen_ characters of their hash for their image generation. So while it's practically not possible, one could theoretically find two usernames that share an identicon. We'll account for this in our own implementation to ensure that each seed actually has no shared evicons.
 
@@ -29,13 +29,91 @@ The algorithm goes, roughly, like this:
 
 1. Define a grid. Place vectors at every intersection of the grid lines in random directions. These are our **Gradient Vectors**. Normalize them.
 
+<div class="img-row">
+
+![Alt text](image-5.png)
+
+![Alt text](image-6.png)
+
+</div>
 2. For each pixel in our image, find the four grid corners that surround it, and draw four more vectors for this pixel, with the origin being at its respective corner and its end coordinates laying at the pixel's position. These are our **Offset Vectors**.
+
+```
+
+    function drawPerlinAtPosition(x, y, imageData, gradientVectors, colors, gridSegmentPxWidth, gridSegmentPxHeight) {
+        // Find grid segment
+        var gridSegmentX = Math.floor(x / gridSegmentPxWidth);
+        var gridSegmentY = Math.floor(y / gridSegmentPxHeight);
+
+        ...
+
+        var offsetVectors = [
+            { i: (x - topLeftPosX) / gridSegmentPxWidth, j: (y - topLeftPosY) / gridSegmentPxHeight },
+            { i: (x - topRightPosX) / gridSegmentPxWidth, j: (y - topRightPosY) / gridSegmentPxHeight },
+            { i: (x - bottomLeftPosX) / gridSegmentPxWidth, j: (y - bottomLeftPosY) / gridSegmentPxHeight },
+            { i: (x - bottomRightPosX) / gridSegmentPxWidth, j: (y - bottomRightPosY) / gridSegmentPxHeight },
+        ];
+
+        ...
+
+```
 
 3. For each of our offset vectors, find the respective Gradient Vectors and calculate a dot product between the vectors. Store these four dot products in a list.
 
+```
+
+    let dotProducts = [];
+    for (var i = 0; i < offsetVectors.length; i++) {
+        let gradient = gradientVectorsForPosition[i];
+
+        let dotProduct = offsetVectors[i].i * gradient.i + offsetVectors[i].j * gradient.j;
+        dotProducts.push(dotProduct);
+    }
+
+```
+
 4. Interpolate the dot products, first along the x-axis, and then once more along the y-axis. This final interpolation is our **perlin noise value at that point.**
 
+```
+
+    // Interpolate x
+    var x1 = interpolateDotProducts(dotProducts[0], dotProducts[1], relativeX);
+    var x2 = interpolateDotProducts(dotProducts[2], dotProducts[3], relativeX);
+
+    // Interpolate y using the results of x interpolation
+    var factor = interpolateDotProducts(x1, x2, relativeY);
+
+    ...
+
+    function interpolateDotProducts(a, b, t) {
+        return a + smoothstep(t) * (b - a);
+    }
+
+    function smoothstep(t) {
+        return t * t * t * (t * (t * 6 - 15) + 10);
+    }
+
+
+```
+
+![Alt text](image-7.png)
+
+
 5. Use our perlin noise value and interpolate it between our primary and secondary color to get the final pixel hue.
+
+```
+
+    function interpolateColor(color1, color2, factor) {
+        const result = color1.slice();
+        for (let i = 0; i < 3; i++) {
+            result[i] = Math.round(result[i] + perlinFactor * (color2[i] - color1[i]));
+        }
+        return result; // <-- Final hue for pixel
+    }
+
+```
+
+![Alt text](image-8.png)
 
 6. Repeat for all pixels in the image.
 
@@ -47,11 +125,30 @@ The above algorithm only generates a single perlin noise image, but we want an a
 
 7. Rotate each **Gradient Vector** slightly.
 
+```
+
+    function rotateGradientVectors(gradientVectors) {
+        for (let y = 0; y <= NUMBER_OF_SEGMENTS; y++) {
+            for (let x = 0; x <= NUMBER_OF_SEGMENTS; x++) {
+                let gradient = gradientVectors[`${x}:${y}`];
+                let angle = Math.atan2(gradient.j, gradient.i); // Get the current angle of the gradient
+                let newAngle = angle + Math.sin(TIME_INCREMENT); // Increment the angle by t for rotation
+
+                gradientVectors[`${x}:${y}`] = {
+                    i: Math.cos(newAngle),
+                    j: Math.sin(newAngle),
+                };
+            }
+        }
+    }
+
+```
+
 8. Re-render all pixels.
 
-The re-calculation of the gradient vectors will cause the pixel hue to be recalculated just slightly. As the vectors continue to rotate, they'll approach their initially set positions, and then the animation begins from the beginning.
+![Alt text](perlin.gif)
 
-And that's pretty much it!
+The re-calculation of the gradient vectors will cause the pixel hue to be recalculated just slightly. As the vectors continue to rotate, they'll approach their initially set positions, and then the animation begins from the beginning.
 
 ### What about the seed value?
 

@@ -7,7 +7,8 @@ const { frontmatter } = Astro.props;
     <br />
     <div id="top-info">
         <a href="/evicons" title="What is this smudge?">
-            <canvas id={frontmatter.title} class="evicon" width="25" height="25"></canvas>
+            <canvas id={frontmatter.title} class="evicon" width="25" height="25"
+            ></canvas>
         </a>
         <p class="date">
             {
@@ -42,23 +43,43 @@ const { frontmatter } = Astro.props;
         margin: 0 7px;
         font-style: italic;
     }
+
+    .img-row {
+        margin: auto;
+    }
 </style>
 <script type="module" src="../src/scripts/evicons-loader.js"></script>
 <script defer>
-    const MAX_IMAGE_WIDTH_PX = 850;
+    const MAX_IMAGE_WIDTH = 850;
+    const MAX_IMAGE_HEIGHT = 400;
     let images = document.getElementsByTagName("img");
     for (let i = 0; i < images.length; i++) {
         let targetImage = images[i];
 
-        // Resize if too large
-        if (targetImage.width > MAX_IMAGE_WIDTH_PX) {
+        if (targetImage.height > MAX_IMAGE_HEIGHT) {
+            let previousHeight = targetImage.height;
+            targetImage.width =
+                (MAX_IMAGE_HEIGHT * targetImage.width) / previousHeight;
+            targetImage.height = MAX_IMAGE_HEIGHT;
+        } else if (targetImage.width > MAX_IMAGE_WIDTH) {
             let previousWidth = targetImage.width;
-            targetImage.width = MAX_IMAGE_WIDTH_PX;
+            targetImage.width = MAX_IMAGE_WIDTH;
             targetImage.height =
-                (MAX_IMAGE_WIDTH_PX * targetImage.height) / previousWidth;
+                (MAX_IMAGE_WIDTH * targetImage.height) / previousWidth;
         }
 
         // Position images in center of screen, margin: auto does not work
         targetImage.style.marginLeft = `calc((100ch - ${targetImage.width}px) / 2)`;
+    }
+
+    let imageRows = document.getElementsByClassName("img-row");
+    for (let i = 0; i < imageRows.length; i++) {
+        let nextImageRow = imageRows[i];
+        nextImageRow.style.display = "flex";
+
+        let childImages = nextImageRow.getElementsByTagName("img");
+        for (let j = 0; j < childImages.length; j++) {
+            childImages[j].style.marginLeft = '20px'; // TODO: figure out a better way to deal with this.
+        }
     }
 </script>
