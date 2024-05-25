@@ -1,29 +1,29 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
 title: 'Introducing Evicons'
-pubDate: 2024-05-24
+pubDate: '2024-05-25T00:00:00'
 description: ''
 tags: ["astro", "blogging", "learning in public"]
 ---
 # Introducing Evicons
 
 ## How it started
-I like Github identicons. They're kind of charming, you know? Something simple to give your users to distinguish themselves. I kept [mine](https://github.com/identicons/evklein.png) as my main profile picture for a long time.
+I like GitHub Identicons. They're kind of charming, you know? Something simple to give your users to distinguish themselves. I kept [mine](https://GitHub.com/Identicons/evklein.png) as my main profile picture for a long time.
 
 ![Alt text](image-3.png)
 
-I also like the idea of building my own identicons, so I decided to build something for this blog, to distinguish between pages, posts, or projects. You've probably seen them floating around on this site (there's one at the top of this post). I'm pretty proud how they turned out and thought I'd document the process here.
+I also like the idea of building my own Identicons, so I decided to build something for this blog, to distinguish between pages, posts, or projects. You've probably seen them floating around on this site (there's one at the top of this post). I'm pretty proud of how they turned out and thought I'd document the process here.
 
-## To each its own
+## To each their own
 
-Github identicons are unique to their user, and are calculated via a cryptographic hash of the user's username (according to [this post](https://github.blog/2013-08-14-identicons/)). I like the cryptography aspect of this, but I think we can use the seed in a more interesting way, but I'll get to that. The point is, our identicons should be ***cryptographically distinct***, deterministic of their output. An Evicon should never be shared by the same seed. To accomplish this, we can do the same thing that Github does and pass the seed through a cryptographic hash function. We'll work with MD5 for this implementation.
+GitHub Identicons are unique to their user, and are calculated via a cryptographic hash of the user's username (according to [this post](https://GitHub.blog/2013-08-14-Identicons/)). I like the cryptography aspect of this, but I think we can use the seed in a more interesting way, but I'll get to that. The point is, our Identicons should be ***cryptographically distinct***, deterministic based on their input, which we will call the **seed**. An Evicon should never be shared by the same seed. To accomplish this, we can do the same thing that GitHub does and pass the seed through a cryptographic hash function. We'll work with MD5 for this implementation, same as GitHub. For our seed, we'll use whatever identifying piece of information we have available for the item we want an Evicon associated with. For example, for blog posts like this one, the seed is simply the title of the post.
 
-Fun fact: I learned that Github identicons only use the _first fifteen_ characters of their hash for their image generation. So while it's practically not possible, one could theoretically find two usernames that share an identicon. We'll account for this in our own implementation to ensure that each seed actually has no shared evicons.
+Fun fact: I learned that GitHub Identicons only use the _first fifteen_ characters of their hash for their image generation. So while it’s practically impossible, one could theoretically find two usernames that share an identicon. We'll account for this in our own implementation to ensure that each seed actually has no shared Evicons.
 
 
 ## A whole lotta noise
 
-I think an animation would be nice, and with our MD5 hash we should have plenty of information we can use to 'seed' the animation, at least for some initial state. I've opted to use <a href="https://wikipedia.org/perlin_noise">Perlin noise</a> to generate the animation. Perlin noise is a pretty popular algorithm, especially in the game development space, and is most often used to generate noise maps for terrain generation. It has a nice effect to it, so I built my own implementation that can accept an input seed and generate a completely unique animation ot that seed. I'm not going to walk through all the code for this, but I will document the important parts as well as some struggles I ran into along the way.
+I think an animation would be nice, and with our MD5 hash we should have plenty of information we can use to 'seed' the animation, at least for some initial state. I've opted to use <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a> to generate the animation. Perlin noise is a pretty popular algorithm, especially in the game development space, and is most often used to generate noise maps for terrain generation. It has a nice effect to it, so I built my own implementation that can accept an input seed and generate a completely unique animation of that seed. I'm not going to walk through all the code for this (full source is available [here](https://GitHub.com/evklein/blog/blob/master/src/scripts/eviconsV1.js)), but I will document the important parts as well as some struggles I ran into along the way.
 
 The algorithm goes, roughly, like this:
 
@@ -36,11 +36,13 @@ The algorithm goes, roughly, like this:
 ![Alt text](image-6.png)
 
 </div>
-2. For each pixel in our image, find the four grid corners that surround it, and draw four more vectors for this pixel, with the origin being at its respective corner and its end coordinates laying at the pixel's position. These are our **Offset Vectors**.
+
+2. For each pixel in our image, find the four grid corners that surround it, and draw four more vectors for this pixel, with the origin sitting at its respective corner and its end coordinates laying at the pixel's position. These are our **Offset Vectors**.
 
 ```
 
-    function drawPerlinAtPosition(x, y, imageData, gradientVectors, colors, gridSegmentPxWidth, gridSegmentPxHeight) {
+    function drawPerlinAtPosition(x, y, imageData,  gradientVectors, colors,
+                                    gridSegmentPxWidth, gridSegmentPxHeight) {
         // Find grid segment
         var gridSegmentX = Math.floor(x / gridSegmentPxWidth);
         var gridSegmentY = Math.floor(y / gridSegmentPxHeight);
@@ -72,7 +74,7 @@ The algorithm goes, roughly, like this:
 
 ```
 
-4. Interpolate the dot products, first along the x-axis, and then once more along the y-axis. This final interpolation is our **perlin noise value at that point.**
+4. Interpolate the dot products, first along the x-axis, and then once more along the y-axis. This final interpolation is our **Perlin noise value at that point.**
 
 ```
 
@@ -99,7 +101,7 @@ The algorithm goes, roughly, like this:
 ![Alt text](image-7.png)
 
 
-5. Use our perlin noise value and interpolate it between our primary and secondary color to get the final pixel hue.
+5. Use our perlin noise value and interpolate it between our primary and secondary color to get the final pixel hue. How these colors are chosen will be discussed more later, but just know that I wanted the output to be more than a grayscale map.
 
 ```
 
@@ -113,9 +115,15 @@ The algorithm goes, roughly, like this:
 
 ```
 
+6. Repeat for all pixels in the image.
+
+<div class="img-row">
+
 ![Alt text](image-8.png)
 
-6. Repeat for all pixels in the image.
+![Alt text](image-9.png)
+
+</div>
 
 Done! Not without some headaches, but I did eventually get an implementation of this working in Vanilla JS, and that's ultimately what you can see on this site.
 
@@ -152,9 +160,11 @@ The re-calculation of the gradient vectors will cause the pixel hue to be recalc
 
 ### What about the seed value?
 
+There's two ways that the inputted seed value affect the animation: defining the colors and defining the initial gradient vectors.
+
 In step #1 I mentioned that the Gradient Vectors should be assigned to a "random" direction, but we already _have_ a random value! We can simply use the MD5 hash of our seed to get the _i_ and _j_ values for each vector, and continue looping through the characters of the hash 2 at a time to build a list of vectors.
 
-Two characters of our hash will yield two digits of a base-16 number, which translates to a number in decimal ranging between **0 and 256**. That gives us plenty of range of direction, but what if we want some of our vectors to be pointing in _negative_ directions? Well, let's establish certain character values of the hash as indicating a negative direction. We can use entries of the Fibonacci sequence to choose the indices that we will use for these characters, and then we can update the direction vectors by multiplying them against these values:
+Two characters of our hash string will yield two digits of a base-16 number, which translates to a number in decimal ranging between **0 and 256**. That gives us plenty of range of direction, but what if we want some of our vectors to be pointing in _negative_ directions? To do this we can establish certain _chosen indices_ using a static list of numbers that are the same every time. Then, to determine which vectors values should be negative, we can find the digits at those indices and mark the value as negative if it is <= 0x08, or positive if it's above 0x08. I chose the Fibonacci sequence for this list of indices, for no other reason than it's more interesting than me typing out a random array like [1, 7, 9, 15, ...].
 
 ```
 
@@ -197,43 +207,24 @@ And then below, when we build our Gradient Vectors
 
 ### A pop of color
 
-There's 16 bytes in an MD5 hash, rendered as a hexidecimal string of 32 characters, like this:
+There's 16 bytes in an MD5 hash, which results in a hexadecimal value with thirty-two digits. We can take the first six digits and the second six digits, and we now have two "random" colors that we can use. So the hash `ef8254cee2dab002fdcc623de5da9b23` translates to:
 
-`e9026fb12e314ddb41cdd8529536f581`
-
-I've decided that Evicons should be made primarily of two colors, so we can simply use the first 12 characters here to come up with two color codes, and we're done.
-
-<div style="width: 200px; display: flex; text-align: center; margin: auto;">
-    <span style="border-radius: 30px; display: block; width: 45px; height: 30px; background-color: #e9026f; margin-right: 5px;"></span>
-    <i style="margin-right: 10px;">#e9026f</i>
-    <span style="margin-right: 10px">&</span>
-    <span style="margin-right: 5px; border-radius: 30px; display: block; width: 45px; height: 30px; background-color: #b12e31"></span>
-    <i>#b12e31</i>
+<div style="width: 200px; height: 30px; display: flex; text-align: center; margin: auto;">
+    <span style="background-color: #ef8254; border-radius: 15px; min-width: 30px; min-height: 30px; margin-right: 10px;"></span>
+    <b style="margin-top: 3px; margin-right: 10px;">#ef8254</b>
+    <span style="background-color: #cee2da; border-radius: 15px; min-width: 30px; min-height: 30px; margin-right: 10px;"></span>
+    <b style="margin-top: 3px">#cee2da</b>
 </div>
-
-When we build the animation, we can interpolate these two colors together using the outputted perlin value, and the result is some sort of gradient between the two. Don't ask me to explain this any further, I'll fully own up to the fact that I was tired and ChatGPT wrote this part for me.
-
-```
-
-    function interpolateColor(color1, color2, perlinFactor) {
-        const result = color1.slice();
-        for (let i = 0; i < 3; i++) {
-            result[i] = Math.round(result[i] + perlinFactor * (color2[i] - color1[i]));
-        }
-        return result;
-    }
-
-```
 
 ## Drawbacks
 
-There's a few drawbacks to our Perlin Noise approach to the Evicon, (I've affectionately dubbed the script `eviconsV1.js` for a reason) worth going over.
+There's a few drawbacks to our Perlin Noise approach to the Evicon, (I've affectionately dubbed the script `EviconsV1.js` for a reason) worth going over.
 
 1. They're needlessly complicated.
 
 2. It's fairly easy to generate an Evicon that resembles another one, so they're not really all that good at _identifying_ anything, even if they offer a decent approximation.
 
-2. Perlin Noise has a time complexity of **O(2<sup>n</sup>)**, so it's fairly slow. I haven't seen much dip in browser performance, but it's something I'll have to keep on as the site grows. <a href="">Simplex noise</a> is an alternative (also developed by Ken Perlin) that might be a better candidate for next time.
+2. Perlin Noise has a time complexity of **O(2<sup>n</sup>)**, so it's relatively slow. I haven't seen much dip in browser performance, but it's something I'll have to keep on as the site grows. <a href="">Simplex noise</a> is an alternative (also developed by Ken Perlin) that might be a better candidate for next time.
 
 
 ## Fin

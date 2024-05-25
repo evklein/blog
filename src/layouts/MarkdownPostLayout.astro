@@ -12,7 +12,7 @@ const { frontmatter } = Astro.props;
         </a>
         <p class="date">
             {
-                new Date(frontmatter.pubDate.slice(0, 10)).toLocaleDateString(
+                new Date(frontmatter.pubDate).toLocaleDateString(
                     "en-us",
                     {
                         weekday: "long",

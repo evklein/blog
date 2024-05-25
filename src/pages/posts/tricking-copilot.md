@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
 title: 'An annoying quirk of Copilot and how to quickly get around it'
-pubDate: 2024-05-23
+pubDate: '2024-05-23T00:00:00'
 description: ''
 tags: ["astro", "blogging", "learning in public"]
 ---
