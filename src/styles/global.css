@@ -167,3 +167,7 @@ a:hover {
     color: #007f70;
     font-weight: bold;
 }
+
+.astro-code {
+    border-radius: 6px !important;
+}

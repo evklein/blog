@@ -39,7 +39,7 @@ The algorithm goes, roughly, like this:
 
 2. For each pixel in our image, find the four grid corners that surround it, and draw four more vectors for this pixel, with the origin sitting at its respective corner and its end coordinates laying at the pixel's position. These are our **Offset Vectors**.
 
-```
+```javascript
 
     function drawPerlinAtPosition(x, y, imageData,  gradientVectors, colors,
                                     gridSegmentPxWidth, gridSegmentPxHeight) {
@@ -62,7 +62,7 @@ The algorithm goes, roughly, like this:
 
 3. For each of our offset vectors, find the respective Gradient Vectors and calculate a dot product between the vectors. Store these four dot products in a list.
 
-```
+```javascript
 
     let dotProducts = [];
     for (var i = 0; i < offsetVectors.length; i++) {
@@ -76,7 +76,7 @@ The algorithm goes, roughly, like this:
 
 4. Interpolate the dot products, first along the x-axis, and then once more along the y-axis. This final interpolation is our **Perlin noise value at that point.**
 
-```
+```javascript
 
     // Interpolate x
     var x1 = interpolateDotProducts(dotProducts[0], dotProducts[1], relativeX);
@@ -103,7 +103,7 @@ The algorithm goes, roughly, like this:
 
 5. Use our perlin noise value and interpolate it between our primary and secondary color to get the final pixel hue. How these colors are chosen will be discussed more later, but just know that I wanted the output to be more than a grayscale map.
 
-```
+```javascript
 
     function interpolateColor(color1, color2, factor) {
         const result = color1.slice();
@@ -133,7 +133,7 @@ The above algorithm only generates a single perlin noise image, but we want an a
 
 7. Rotate each **Gradient Vector** slightly.
 
-```
+```javascript
 
     function rotateGradientVectors(gradientVectors) {
         for (let y = 0; y <= NUMBER_OF_SEGMENTS; y++) {
@@ -166,7 +166,7 @@ In step #1 I mentioned that the Gradient Vectors should be assigned to a "random
 
 Two characters of our hash string will yield two digits of a base-16 number, which translates to a number in decimal ranging between **0 and 256**. That gives us plenty of range of direction, but what if we want some of our vectors to be pointing in _negative_ directions? To do this we can establish certain _chosen indices_ using a static list of numbers that are the same every time. Then, to determine which vectors values should be negative, we can find the digits at those indices and mark the value as negative if it is <= 0x08, or positive if it's above 0x08. I chose the Fibonacci sequence for this list of indices, for no other reason than it's more interesting than me typing out a random array like [1, 7, 9, 15, ...].
 
-```
+```javascript
 
     function getFibonacciSequence() {
         let fibonacciSequence = [];
@@ -190,7 +190,7 @@ Two characters of our hash string will yield two digits of a base-16 number, whi
 
 And then below, when we build our Gradient Vectors
 
-```
+```javascript
 
     for (let y = 0; y <= NUMBER_OF_SEGMENTS; y++) {
         for (let x = 0; x <= NUMBER_OF_SEGMENTS; x++) {
