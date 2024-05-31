@@ -36,7 +36,16 @@ const pageTitle = "Evan Klein's Blog";
                             </a>
                         </p>
                         <p class="date">
-                            {post.frontmatter.pubDate.slice(0, 10)}
+                            {/* {post.frontmatter.pubDate.slice(0, 10)} */}
+                            {
+                                new Date(post.frontmatter.pubDate).toLocaleDateString(
+                                    "en-us",
+                                    {
+                                        month: "short",
+                                        day: "numeric",
+                                    }
+                                )
+                            }
                         </p>
                     </div>
                 ))
