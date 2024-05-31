@@ -13,6 +13,14 @@ This is a silly example, but Copilot has burned me a couple of times on things l
 
 ![alt text](image-2.png)
 
-<code>string meaningOfLove = "The meaning of love varies among different people and cultures. It's a complex and powerful emotion that can be hard to define as it encompasses a range of feelings and attitudes.";</code>
+```c#
+
+    string meaningOfLove =
+        """
+            The meaning of love varies among different people and cultures. It's a complex and 
+            powerful emotion that can be hard to define as it encompasses a range of feelings and attitudes.
+        """;
+    
+```
 
 Not a very good answer, but still. Checkmate, Copilot.
