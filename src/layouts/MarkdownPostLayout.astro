@@ -1,4 +1,5 @@
 ---
+import CommentSection from "../components/CommentSection.astro";
 import BaseLayout from "./BaseLayout.astro";
 const { frontmatter } = Astro.props;
 ---
@@ -26,6 +27,7 @@ const { frontmatter } = Astro.props;
     </div>
     <p><em>{frontmatter.description}</em></p>
     <slot />
+    <CommentSection issueTitle={frontmatter.title} />
 </BaseLayout>
 <style>
     #top-info {

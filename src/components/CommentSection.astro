@@ -1,0 +1,23 @@
+---
+const { issueTitle } = Astro.props;
+---
+
+<div class="commentSection">
+    <h2>Comments</h2>
+    <script src="https://utteranc.es/client.js"
+        repo="evklein/blog"
+        issue-term={issueTitle}
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+</div>
+<style>
+    .commentSection {
+        margin-top: 75px;
+    }
+    .commentSection h2 {
+        margin-bottom: 0;
+        color: #555;
+    }
+</style>
