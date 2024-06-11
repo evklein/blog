@@ -38,17 +38,20 @@ h1 {
 
 /* nav styles */
 .hamburger {
-    padding-right: 20px;
+    padding-right: 10px;
     cursor: pointer;
+    margin: auto 0 auto auto;
   }
   
   .hamburger .line {
     display: block;
-    width: 40px;
-    height: 5px;
-    margin-bottom: 10px;
-    background-color: #ff9776;
+    width: 36px;
+    height: 4px;
+    border-radius: 3px;
+    margin-bottom: 7px;
+    background-color: black;
   }
+
 
 #name {
     display: inline-block;
@@ -59,7 +62,6 @@ h1 {
     width: 100%;
     top: 5rem;
     left: 48px;
-    background-color: #ff9776;
     display: none;
     margin: 0;
     display: inline-block;
@@ -123,8 +125,8 @@ h1 {
     color: hwb(165 26% 25%);
 }
 
-.expanded {
-    display: unset;
+.collapsed {
+    display: none;
 }
 
 .tag {
