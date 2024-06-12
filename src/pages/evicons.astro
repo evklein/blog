@@ -33,44 +33,50 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         </p>
     </div>
     <div class="evicon-demo-section">
-        <div id="evicon-text-input-section">
-            <i id="edit-icon" class="fa-solid fa-pencil"></i>
-            <input
-                id="evicon-text-input"
-                type="text"
-                value="Type something here"
-            />
-            <div id="evicon-demo-section-details">
-                <p id="hash"></p>
-                <p id="primary-color"></p>
-                <p id="secondary-color"></p>
-                <p id="gradient-vectors"></p>
-            </div>
-        </div>
-        <div>
-            <canvas
-                style="height: 150px !important;"
-                id="evicon"
-                class="evicon"
-                width="150"
-                height="150"></canvas>
-            <br />
-            <div id="display-section">
-                <div class="checkbox-container">
+        <div id="evicon-row-wrapper">
+            <div id="evicon-text-input-section-wrapper">
+                <div id="evicon-text-input-section">
+                    <i id="edit-icon" class="fa-solid fa-pencil"></i>
                     <input
-                        type="checkbox"
-                        name="showVectors"
-                        id="show-vectors-checkbox"
+                        id="evicon-text-input"
+                        type="text"
+                        value="Type something here"
                     />
-                    <label for="showVectors">Display vectors</label>
                 </div>
-                <div>
-                    <input
-                        type="checkbox"
-                        name="showGrid"
-                        id="show-grid-checkbox"
-                    />
-                    <label for="showGrid">Display grid</label>
+                <div id="evicon-demo-section-details">
+                    <p id="hash"></p>
+                    <p id="primary-color"></p>
+                    <p id="secondary-color"></p>
+                    <p id="gradient-vectors"></p>
+                </div>
+            </div>
+            <div id="evicon-display-section-wrapper">
+                <div id="evicon-display-section">
+                    <canvas
+                        style="height: 150px !important;"
+                        id="evicon"
+                        class="evicon"
+                        width="150"
+                        height="150">
+                    </canvas>
+                    <div id="display-input-section">
+                        <div class="checkbox-container">
+                            <input
+                                type="checkbox"
+                                name="showVectors"
+                                id="show-vectors-checkbox"
+                            />
+                            <label for="showVectors">Display vectors</label>
+                        </div>
+                        <div>
+                            <input
+                                type="checkbox"
+                                name="showGrid"
+                                id="show-grid-checkbox"
+                            />
+                            <label for="showGrid">Display grid</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -193,30 +199,41 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
     #edit-icon {
         position: relative;
-        left: 50px;
-        top: 42px;
+        left: 42px;
     }
 
     .evicon-demo-section {
         display: flex;
         width: 100%;
+        flex-wrap: wrap;
+    }
+
+    #evicon-row-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
     }
 
     #evicon-text-input-section {
         width: 100%;
-        margin: auto 7%;
+        margin-top: 20px;
+    }
+
+    #evicon-text-input-section-wrapper {
+        display: block;
+        width: 100%;
+        order: 0;
     }
 
     #evicon-text-input {
         height: 60px;
-        width: 100%;
+        width: 95%;
         background: transparent;
         border: 2px solid #888;
         border-radius: 8px;
         font-size: 18px;
         font-family: "Lato";
         font-weight: bold;
-        margin: auto 5%;
         padding: 15px 45px;
     }
 
@@ -226,9 +243,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
 
     #evicon-demo-section-details {
-        margin-top: 15px;
-        margin-left: 5%;
-        line-height: 8px;
+        margin: auto;
+        padding: 10px 20px;
     }
     #evicon-demo-section-details > p {
         font-size: 14px;
@@ -236,8 +252,54 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         line-height: 20px;
     }
 
-    #display-section {
+    #evicon-display-section-wrapper {
+        display: block;
+        order: 1;
+    }
+
+    #evicon-display-section {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #display-input-section {
         text-align: left;
-        margin-left: 15px;
+        margin: auto auto auto 10px;
+    }
+
+    @media(max-width: 768px) {
+        #edit-icon {
+            left: 24px;
+            top: 43px;
+        }
+        #evicon-text-input-section {
+            margin-top: 0;
+        }
+        #evicon-text-input {
+            width: 100%;
+        }
+
+        #evicon-row-wrapper {
+            flex-direction: column;
+        }
+
+        #evicon-display-section-wrapper {
+            display: block;
+            margin: 0 auto 0;
+            order: 0;
+        }
+
+        #evicon-display-section {
+            flex-direction: row;
+        }
+
+        #evicon-text-input-section-wrapper {
+            order: 1;
+        }
+
+        #evicon-demo-section-details {
+        margin: auto;
+        padding: 5px 0;
+    }
     }
 </style>
