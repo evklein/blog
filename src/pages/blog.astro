@@ -16,37 +16,32 @@ const pageTitle = "Evan Klein's Blog";
                 .sort(
                     (a, b) => Number(new Date(b.frontmatter.pubDate)) - Number(new Date(a.frontmatter.pubDate))
                 )
-                .map((post, index) => (
-                    <div
-                        class={
-                            "post " + (index !== 0 ? "post-with-border" : null)
-                        }
-                    >
+                .map((post) => (
+                    <div class="post">
                         <h3>
                             <a href={post.url}>{post.frontmatter.title}</a>
-                        </h3>
-                        <p class="date">
-                            <a href="/evicons" title="What is this smudge?">
-                                <canvas
-                                    class="evicon"
-                                    id={post.frontmatter.title}
-                                    width="25"
-                                    height="25"
-                                />
-                            </a>
-                        </p>
-                        <p class="date">
-                            {/* {post.frontmatter.pubDate.slice(0, 10)} */}
-                            {
-                                new Date(post.frontmatter.pubDate).toLocaleDateString(
-                                    "en-us",
+                            <div class="right-info">
+                                <p class="date">
                                     {
-                                        month: "short",
-                                        day: "numeric",
+                                        new Date(post.frontmatter.pubDate).toLocaleDateString(
+                                            "en-us",
+                                            {
+                                                month: "short",
+                                                day: "numeric",
+                                                }
+                                        )
                                     }
-                                )
-                            }
-                        </p>
+                                </p>
+                                <a href="/evicons" title="What is this smudge?">
+                                    <canvas
+                                        class="evicon"
+                                        id={post.frontmatter.title}
+                                        width="25"
+                                        height="25"
+                                    />
+                                </a>
+                            </div>
+                        </h3>
                     </div>
                 ))
         }
@@ -65,20 +60,25 @@ const pageTitle = "Evan Klein's Blog";
         font-size: 12pt;
     }
     .post {
-        height: 10px !important;
-        margin: 10px 0;
         display: inline-block;
         width: 90%;
-    }
-    .post-with-border {
-        margin: 10px 0;
         border-bottom: 1px solid hwb(165 26% 25%);
+        display: flex;
+    }
+    .post:last-child {
+        border-bottom: none;
     }
     h3 {
         display: inline-block;
+        width: 100%;
+    }
+    .right-info {
+        float: right;
+        display: flex;
     }
     .date {
-        float: right;
+        margin: 0;
+        font-weight: lighter;
         font-family: "Courier New", Courier, monospace;
     }
     a {
@@ -95,5 +95,16 @@ const pageTitle = "Evan Klein's Blog";
         margin-top: -3px;
         border: 1px solid #aaa;
         border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+        .post {
+            min-height: 55px;
+            width: 100%;
+        }
+
+        .post > h3 > a {
+            width: 60%;
+        }
     }
 </style>
