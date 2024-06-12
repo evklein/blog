@@ -106,4 +106,14 @@ const allPosts = await Astro.glob("../pages/posts/*.md");
         float: right;
         font-family: 'Courier New', Courier, monospace;
     }
+
+      @media (max-width: 768px) {
+        .home-body {
+            margin-top: 75px;
+        }
+
+        .small-text {
+            width: 100%;
+        }
+    }
 </style>

@@ -1,13 +1,19 @@
 ---
-import Hamburger from './Hamburger.astro';
-import Navigation from './Navigation.astro';
+import Hamburger from "./Hamburger.astro";
+import Navigation from "./Navigation.astro";
 ---
+
 <header>
-  <nav>
-    <h1 id="name"><a href="/">Evan Klein</a></h1>
-    <Hamburger />
-    <Navigation />
-  </nav>
+    <nav>
+        <div class="header-primary">
+            <h1 id="name"><a href="/">Evan Klein</a></h1>
+            <Hamburger />
+        </div>
+        <div class="header-secondary">
+
+            <Navigation />
+        </div>
+    </nav>
 </header>
 
 <style>
