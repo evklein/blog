@@ -23,8 +23,12 @@ const currentFullYear: number = new Date().getFullYear()
 <footer>
     <hr />
     <div class="links">
-        <Social externalUrl="https://github.com/evklein/" icon="github" />
-        <Social externalUrl="https://www.linkedin.com/in/evan-klein-40b255119/" icon="linkedin" />
+        <div class="icons">
+            <Social externalUrl="https://github.com/evklein/" icon="github" title="GitHub"/>
+            <Social externalUrl="https://www.linkedin.com/in/evan-klein-40b255119/" icon="linkedin" title="LinkedIn" />
+            <Social externalUrl="/rss.xml" icon="rss" title="RSS">RSS</Social>
+    
+        </div>
         <p>Copyright © Evan Klein {currentFullYear}</p>
     </div>
 </footer>

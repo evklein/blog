@@ -45,6 +45,14 @@ const allPosts = await Astro.glob("../pages/posts/*.md");
                     .map((post) => (
                         <div class="post">
                             <h3 class="post-title">
+                                <a href="/evicons" title="What is this smudge?">
+                                    <canvas
+                                            class="evicon"
+                                            id={post.frontmatter.title}
+                                            width="25"
+                                            height="25"
+                                        />
+                                </a>
                                 <a href={post.url}>{post.frontmatter.title}</a>
                             </h3>
                             <p class="post-date">
@@ -62,7 +70,12 @@ const allPosts = await Astro.glob("../pages/posts/*.md");
         </div>
     </div>
 </BaseLayout>
+<script type="module" src="../src/scripts/evicons-loader.js"></script>
 <style>
+    .evicon {
+        border-radius: 4px;
+        position: relative;
+    }
     .home-body {
         margin-top: 125px;
     }
@@ -96,6 +109,11 @@ const allPosts = await Astro.glob("../pages/posts/*.md");
     .post-title {
         margin-top: 5px;
         float: left;
+        display: flex;
+        align-items: center;
+    }
+    .post-title > a {
+        margin-left: 10px;
     }
     .post-date {
         margin-top: 5px;

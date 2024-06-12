@@ -45,6 +45,7 @@ h1 {
     padding-right: 10px;
     cursor: pointer;
     margin: auto 0 auto auto;
+    display: none;
   }
   
 .hamburger .line {
@@ -63,12 +64,12 @@ h1 {
   
 .nav-links {
     float: right;
-    width: 100%;
     top: 5rem;
     left: 48px;
-    display: none;
     margin: 0;
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    margin: 0 0 0 auto;
 }
   /*
 .nav-links a {
@@ -102,7 +103,8 @@ h1 {
     position: relative;
     text-decoration: none;
     color: black;
-    margin: 5px;
+    margin: auto 20px;
+    padding: 5px;
 }
 
 .nav-links a::after {
@@ -127,10 +129,10 @@ h1 {
     text-decoration: none !important;
     font-size: 14px;
     color: hwb(165 26% 25%);
+    padding: 15px;
 }
-
-.collapsed {
-    display: none;
+.nav-links .offset:hover::after {
+    width: 0%;
 }
 
 .tag {
@@ -161,7 +163,23 @@ a:hover {
 }
 
 @media(max-width: 768px) {
+    .nav-links {
+        flex-direction: column;
+        flex-wrap: wrap;
+        width: 100%;
+    }
     .nav-links > a {
+        width: 100%;
         padding: 3px 0 5px 0;
+        margin: 0;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    
+    .collapsed {
+        display: none;
     }
 }

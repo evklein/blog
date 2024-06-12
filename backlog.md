@@ -5,3 +5,5 @@
 - [ ] Blog post tags (with color based on tag hash)
 - [ ] Contact form
 - [ ]
+
+- [ ] Recent commits
