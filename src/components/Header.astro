@@ -5,14 +5,9 @@ import Navigation from "./Navigation.astro";
 
 <header>
     <nav>
-        <div class="header-primary">
-            <h1 id="name"><a href="/">Evan Klein</a></h1>
-            <Hamburger />
-        </div>
-        <div class="header-secondary">
-
-            <Navigation />
-        </div>
+        <h1 id="name"><a href="/">Evan Klein</a></h1>
+        <Hamburger />
+        <Navigation />
     </nav>
 </header>
 
@@ -28,9 +23,9 @@ import Navigation from "./Navigation.astro";
         color: hwb(165 26% 25%);
     }
     @media (max-width: 768px) {
-      nav {
-        display: flex;
-        flex-wrap: wrap;
-      }
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+        }
     }
 </style>
