@@ -54,6 +54,7 @@ h1 {
     border-radius: 3px;
     margin-bottom: 7px;
     background-color: black;
+    box-shadow: 2px 2px 1px hwb(165 26% 25%)
   }
 
 #name {
