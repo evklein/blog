@@ -1,0 +1,59 @@
+.commit-record {
+    display: flex;
+    align-items: center;
+    border: 1px solid #c2c2c3;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 5px;
+    flex-wrap: wrap;
+}
+
+.commit-record-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.commit-primary-details {
+    display: flex;
+    align-items: center;
+}
+
+.changes {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.changes > .additions {
+    color: green;
+}
+
+.changes > .deletions {
+    color: darkred;
+}
+
+.commit-repository {
+    font-size: 14pt;
+}
+
+.commit-message {
+    font-style: italic;
+    font-size: 12pt;
+}
+
+.date {
+    color: #999999;
+    margin-left: 5px;
+}
+
+.commit-hash {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    margin-left: auto;
+    font-size: 14pt;
+}
+
+.emphasize {
+    font-size: 14pt;
+    font-style: italic;
+    font-weight: bold;
+}

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Typewriter from "../components/Typewriter";
+import RecentCommits from "../components/RecentCommits";
 const pageTitle = "Home Page";
 const allPosts = await Astro.glob("../pages/posts/*.md");
 ---
@@ -69,6 +70,7 @@ const allPosts = await Astro.glob("../pages/posts/*.md");
             }
         </div>
     </div>
+    <RecentCommits client:load blogPosts={allPosts}/>
 </BaseLayout>
 <script type="module" src="../src/scripts/evicons-loader.js"></script>
 <style>

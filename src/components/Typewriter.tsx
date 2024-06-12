@@ -33,7 +33,7 @@ export default function Typewriter(props: TypewriterProps) {
           newString = newString.slice(0, mistakeIndex) + mistake + newString.slice(mistakeIndex);
       }
       setMistakeToUse(newString);
-      console.log("Mistake generated. " + newString);
+    //   console.log("Mistake generated. " + newString);
   }
     function type() {
         if (!props.makeMistakes) {
@@ -63,8 +63,8 @@ export default function Typewriter(props: TypewriterProps) {
     }
 
     function typeNextCharacter() {
-        console.log(index);
-        console.log("typing next character, index is " + index + ", character at index is " + mistakeToUse[index]);
+        // console.log(index);
+        // console.log("typing next character, index is " + index + ", character at index is " + mistakeToUse[index]);
         if (mistakeTyped) {
             if (!mistakeNoticed) {
                 const mistakeIsCaught: boolean = Math.floor(Math.random() * 100) < 20; // 1-in-5 chance that the mistake will be caught.
@@ -72,13 +72,13 @@ export default function Typewriter(props: TypewriterProps) {
                 if (mistakeIsCaught || textInProgress.length === props.text.length) {
                   turnaroundIndex = index;
                   moveBackwards = true;
-                  console.log("MISTAKE NOTICED: turnaround = " + turnaroundIndex + ", moving backwards");
+                //   console.log("MISTAKE NOTICED: turnaround = " + turnaroundIndex + ", moving backwards");
                 }
             }
 
             if (mistakeNoticed) {
                 if (index === firstMistakeFoundAt) {
-                  console.log("MISTAKE REMOVED: " + index + ", resuming forward motion")
+                //   console.log("MISTAKE REMOVED: " + index + ", resuming forward motion")
                   moveBackwards = false;
                 }
                 if (moveBackwards) {
@@ -94,7 +94,7 @@ export default function Typewriter(props: TypewriterProps) {
                     mistakeNoticed = false;
                     turnaroundIndex = -1;
                     firstMistakeFoundAt = -1;
-                    console.log("MISTAKE CORRECTED. HARDENED INDEX SITS AT " + hardenedTextIndex + ", HARDENED WORD SITS AT " + props.text.slice(0, hardenedTextIndex));
+                    // console.log("MISTAKE CORRECTED. HARDENED INDEX SITS AT " + hardenedTextIndex + ", HARDENED WORD SITS AT " + props.text.slice(0, hardenedTextIndex));
                   }
                 }
             } else {
@@ -104,7 +104,7 @@ export default function Typewriter(props: TypewriterProps) {
         } else {
             textInProgress = props.text.slice(0, hardenedTextIndex) +  mistakeToUse.slice(hardenedTextIndex, index + 1);
             if (props.text[index] !== textInProgress[index]) {
-                console.log("MISTAKE FOUND: index " + index + ", " + props.text.slice(0, index + 1) + " != " + textInProgress.slice(0, index + 1));
+                // console.log("MISTAKE FOUND: index " + index + ", " + props.text.slice(0, index + 1) + " != " + textInProgress.slice(0, index + 1));
                 mistakeTyped = true;
                 firstMistakeFoundAt = index;
             }
