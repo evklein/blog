@@ -39,7 +39,7 @@
         let links = document.querySelectorAll("a.nav-link");
         console.log(links);
         links.forEach(link => {
-            let iconElement = link.querySelector('.nav-link-icon');
+            let iconElement = link.querySelectorAll<HTMLElement>('.nav-link-icon')[0];
             console.log(iconElement);
             if (iconElement) {
                 console.log('setting styling');
