@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Typewriter from "../components/Typewriter";
 import ActivityFeed from "../components/ActivityFeed/ActivityFeed";
+import Evicon from "../components/Evicon/Evicon";
 const pageTitle = "Home Page";
 const allPosts = await Astro.glob("../pages/posts/*.md");
 ---
@@ -32,52 +33,11 @@ const allPosts = await Astro.glob("../pages/posts/*.md");
         You can learn more about me <a href="/about">here</a>, or check out some
         recent going-ons on <a href="/blog">my blog</a>.
     </div>
-    <div class="recent-posts">
-        <h2 class="recent-posts-title">Recent Posts</h2>
-        <div>
-            {
-                allPosts
-                    .sort(
-                        (a, b) =>
-                            Number(new Date(b.frontmatter.pubDate)) -
-                            Number(new Date(a.frontmatter.pubDate)),
-                    )
-                    .slice(0, 3)
-                    .map((post) => (
-                        <div class="post">
-                            <h3 class="post-title">
-                                <a href="/evicons" title="What is this smudge?">
-                                    <canvas
-                                            class="evicon"
-                                            id={post.frontmatter.title}
-                                            width="25"
-                                            height="25"
-                                        />
-                                </a>
-                                <a href={post.url}>{post.frontmatter.title}</a>
-                            </h3>
-                            <p class="post-date">
-                                {new Date(
-                                    post.frontmatter.pubDate,
-                                ).toLocaleDateString("en-us", {
-                                    month: "short",
-                                    day: "numeric",
-                                    year: "numeric",
-                                }).replace(',', '')}
-                            </p>
-                        </div>
-                    ))
-            }
-        </div>
+    <div class="recent-activity">
+        <ActivityFeed client:load blogPosts={allPosts}/>
     </div>
-    <ActivityFeed client:load blogPosts={allPosts}/>
 </BaseLayout>
-<script type="module" src="../src/scripts/evicons-loader.js"></script>
 <style>
-    .evicon {
-        border-radius: 4px;
-        position: relative;
-    }
     .home-body {
         margin-top: 125px;
     }
@@ -94,8 +54,8 @@ const allPosts = await Astro.glob("../pages/posts/*.md");
         font-size: 32px;
     }
 
-    .recent-posts {
-        margin: 100px auto 0;
+    .recent-activity {
+        margin: 120px auto 0;
     }
     .recent-posts-title {
         margin-bottom: 0px;

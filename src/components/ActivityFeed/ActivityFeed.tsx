@@ -17,12 +17,12 @@ interface CommitReference {
 
 interface CardInfo {
     type: string;
+    date: string;
 }
 
 export interface CommitDetails extends CardInfo {
     hash: string;
     repository: string;
-    date: string;
     message: string;
     numberOfAdditions: number;
     numberOfDeletions: number;
@@ -32,12 +32,11 @@ export interface CommitDetails extends CardInfo {
 
 export interface BlogPostRecord extends CardInfo {
     title: string;
-    date: string;
     url: string;
 }
 
 export default function RecentCommits(props: RecentCommitsProps) {
-    const [selectedTab, setSelectedTab] = useState<string>("all");
+    const [selectedTab, setSelectedTab] = useState<string>("posts");
     const [commits, setCommits] = useState<CommitDetails[]>([]);
     const [blogPosts, setBlogPosts] = useState<BlogPostRecord[]>([]);
 
@@ -46,7 +45,7 @@ export default function RecentCommits(props: RecentCommitsProps) {
         fetch(SEARCH_ENDPOINT)
         .then(response => response.json())
         .then(data => {
-            let mostRecentFiveCommits = data["items"].slice(0, 5);
+            let mostRecentFiveCommits = data["items"].slice(0, 12);
             mostRecentFiveCommits.forEach((commit: CommitReference) => {
                 fetchCommitDetails(commit["url"], commit["repository"]["name"]);
             })
@@ -86,15 +85,18 @@ export default function RecentCommits(props: RecentCommitsProps) {
     }, [props.blogPosts]);
 
     function getItemsToDisplay(): CardInfo[] {
-        let combinedInfo = [...commits, ...blogPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 7);
         switch (selectedTab) {
             case "code":
-                return combinedInfo.filter(item => item.type === "git-commit");
+                return commits.sort(cardSortByDateHandler).slice(0, 15);
             case "posts":
-                return combinedInfo.filter(item => item.type === "blog-post");
+                return blogPosts.sort(cardSortByDateHandler).slice(0, 6);
             default:
-                return combinedInfo;
+                return [...commits, ...blogPosts].sort(cardSortByDateHandler);
         }
+    }
+
+    function cardSortByDateHandler(a: CardInfo, b: CardInfo) {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
     }
 
     function getCardComponentForActivityItem(activityDetails: CardInfo, keyIndex: number) {
@@ -115,14 +117,14 @@ export default function RecentCommits(props: RecentCommitsProps) {
                     <i class="fa-solid fa-bars-progress"></i>&nbsp;&nbsp;Recent Activity
                 </div>
                 <div class="tabs">
-                    <span class={`tab-option ${selectedTab === 'all' ? 'selected' : null}`} href="" alt="All" onClick={() => setSelectedTab('all')}>
-                        <i class="fa-solid fa-asterisk"></i>
+                    <span class={`tab-option ${selectedTab === 'posts' ? 'selected' : null}`} href="" alt="Posts" onClick={() => setSelectedTab('posts')}>
+                        <i class="fa-solid fa-newspaper"></i>
                     </span>
                     <span class={`tab-option ${selectedTab === 'code' ? 'selected' : null}`} href="" alt="Code" onClick={() => setSelectedTab('code')}>
                         <i class="fa-solid fa-code-merge"></i>
                     </span>
-                    <span class={`tab-option ${selectedTab === 'posts' ? 'selected' : null}`} href="" alt="Posts" onClick={() => setSelectedTab('posts')}>
-                        <i class="fa-solid fa-newspaper"></i>
+                    <span class={`tab-option ${selectedTab === 'all' ? 'selected' : null}`} href="" alt="All" onClick={() => setSelectedTab('all')}>
+                        <i class="fa-solid fa-asterisk"></i>
                     </span>
                 </div>
             </h2>
