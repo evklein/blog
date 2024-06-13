@@ -164,22 +164,39 @@ a:hover {
 
 @media(max-width: 768px) {
     .nav-links {
-        flex-direction: column;
+        display: flex;
+        flex-direction: row;
         flex-wrap: wrap;
+        gap: 0;
+        row-gap: 0;
         width: 100%;
+        overflow: hidden;
+        transition: height 0ms 400ms, opacity 400ms 0ms;
+        justify-content: center;
     }
     .nav-links > a {
-        width: 100%;
-        padding: 3px 0 5px 0;
-        margin: 0;
+        height: 40px;
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #c2c2c3;
+        font-size: 14pt;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-links > .offset {
+        text-align: center;
     }
 
     .hamburger {
         display: block;
     }
 
-    
     .collapsed {
-        display: none;
+        height: 0;
+        opacity: 0;
+        transition: height 0ms 400ms, opacity 400ms 0ms;
+
     }
 }

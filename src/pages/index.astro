@@ -2,8 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Typewriter from "../components/Typewriter";
 import ActivityFeed from "../components/ActivityFeed/ActivityFeed";
-import Evicon from "../components/Evicon/Evicon";
-const pageTitle = "Home Page";
+const pageTitle = "Home";
 const allPosts = await Astro.glob("../pages/posts/*.md");
 ---
 <BaseLayout pageTitle={pageTitle}>

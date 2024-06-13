@@ -1,10 +1,50 @@
 ---
-
 ---
 <div class="nav-links collapsed">
-    <a href ="/">Home</a>
-    <a href="/about">About</a>
-    <a href="https://www.github.com/evklein">Projects</a>
-    <a href="/blog/">Blog</a>
-    <a class="offset" href="/resume.pdf">my resume</a>
+    <a class="nav-link" id="Home" href ="/">
+        <i class="nav-link-icon fa-solid fa-home"></i>
+        &nbsp;&nbsp;Home
+    </a>
+    <a class="nav-link" id="About" href="/about">
+        <i class="nav-link-icon fa-regular fa-user"></i>
+        &nbsp;&nbsp;About
+    </a>
+    <a class="nav-link" id="Projects" href="https://www.github.com/evklein">
+        <i class="nav-link-icon fa-solid fa-laptop-code"></i>
+        &nbsp;&nbsp;Projects
+    </a>
+    <a class="nav-link" id="Blog" href="/blog/">
+        <i class="nav-link-icon fa-regular fa-newspaper"></i>
+        &nbsp;&nbsp;Blog
+    </a>
+    <a class="nav-link offset" href="/resume.pdf">
+        Resume
+    </a>
 </div>
+<style>
+    .nav-link-icon {
+        font-size: 11pt;
+        display: none;        
+    }
+</style>
+<script>
+    let userIsOnMobile = window.screen.width <= 768;
+    let pageTitle = document.title;
+    let selectedNavElement = document.getElementById(pageTitle);
+    if (selectedNavElement) {
+        selectedNavElement.style.fontWeight = "bold";
+    }
+
+    if (userIsOnMobile) {
+        let links = document.querySelectorAll("a.nav-link");
+        console.log(links);
+        links.forEach(link => {
+            let iconElement = link.querySelector('.nav-link-icon');
+            console.log(iconElement);
+            if (iconElement) {
+                console.log('setting styling');
+                iconElement.style.display = "block";
+            }
+        });
+    }
+</script>

@@ -5,11 +5,12 @@
     - Christmas
     - Halloween
     - Valentine's
-- [ ] Blog post tags (with color based on tag hash)
-- [ ] Working RSS
+- [] Blog post tags (with color based on tag hash)
+- [X] Working RSS
+    - [ ] Content
 - [ ] Projects page
-- [ ] Mobile friendly (all pages/posts)
+- [X] Mobile friendly (all pages/posts)
     - [ ] Smooth animation/restyle for mobile nav menu
 - [ ] Evicons - Active Evicon library
-- [ ] Evicons - Recent posts on Home
-- [ ] Recent commits
+- [X] Evicons - Recent posts on Home
+- [X] Recent commits
