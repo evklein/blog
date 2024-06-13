@@ -1,19 +1,39 @@
-.commit-record {
+.activity-items-wrapper {
+    background-color: #ddd;
+    padding: 0;
+    border-radius: 4px;
+    height: 450px;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+    border: 1px solid #c2c2c3;
+}
+
+.activity-item-card {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #c2c2c3;
+    background-color: #f1f5f9;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 10px
+}
+
+.card-left {
+
+}
+
+.card-right {
+    margin: 0 0 0 auto;
     display: flex;
     align-items: center;
-    border: 1px solid #c2c2c3;
-    padding: 10px;
-    border-radius: 4px;
-    margin: 5px;
-    flex-wrap: wrap;
 }
 
-.commit-record-left {
-    display: flex;
-    flex-direction: column;
+.card-icon {
+    font-size: 14pt;
+    padding: 5px;
 }
 
-.commit-primary-details {
+.primary-details {
     display: flex;
     align-items: center;
 }
@@ -29,10 +49,6 @@
 
 .changes > .deletions {
     color: darkred;
-}
-
-.commit-repository {
-    font-size: 14pt;
 }
 
 .commit-message {
@@ -65,34 +81,50 @@
 }
 
 .tabs {
-    margin-left: auto;
+    margin: 0 20px -33px auto;
 }
 
 .tab-option {
-    padding: 10px 20px;
+    padding: 8px 15px;
     font-size: 16pt;
-    border-bottom: 1px solid #c2c2c3;
+    cursor: pointer;
+    color: #007f70;
+    /* border-bottom: 1px solid #c2c2c3; */
 }
 
 .selected {
     border: 1px solid #c2c2c3;
+    background-color: #ddd;
     border-bottom: 0;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
 }
 
 @media(max-width: 768px) {
-
     .activity-title-text-wrapper {
         display: flex;
         flex-direction: row;
         align-items: center;
         width: 100%;
     }
+    .activity-item-card {
+        font-size: 12pt !important;
+    }
+    .changes {
+        font-size: 12pt;
+    }
+    .emphasize {
+        font-size: 12pt;
+    }
     .activity-title {
         flex-direction: column;
     }
     .tabs {
-        margin: 10px auto 0 0;
+        margin: 10px auto -17px 5px;
     }
+
+    .card-right {
+        font-size: 11pt !important;
+    }
+
 }
