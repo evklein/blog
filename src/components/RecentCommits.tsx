@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'preact/hooks';
 import "../styles/recent-commits.css";
+import type { MarkdownInstance } from 'astro';
 
 interface RecentCommitsProps {
-    blogPosts: [];
+    blogPosts: MarkdownInstance<Record<string, any>>[];
 };
 
 interface CommitReference {
@@ -80,60 +81,81 @@ export default function RecentCommits(props: RecentCommitsProps) {
         let secondsInAYear = 12 * secondsInAMonth;
 
         if (timeBetweenInSeconds < secondsInAMinute) return "less than a minute ago";
-        if (timeBetweenInSeconds < secondsInAnHour) return `${Math.floor(timeBetweenInSeconds / secondsInAMinute)} minutes ago`;
-        if (timeBetweenInSeconds < secondsInADay) return `${Math.floor(timeBetweenInSeconds / secondsInAnHour)} hours ago`;
-        if (timeBetweenInSeconds < secondsInAMonth) return `${Math.floor(timeBetweenInSeconds / secondsInADay)} months ago`;
-        if (timeBetweenInSeconds < secondsInAYear) return `${Math.floor(timeBetweenInSeconds / secondsInAMonth)} months ago`;
-        else return "a long time ago";
+        if (timeBetweenInSeconds < secondsInAnHour) return `${finalizeReadableTimespanString(Math.floor(timeBetweenInSeconds / secondsInAMinute), "minute")}`;
+        if (timeBetweenInSeconds < secondsInADay) return `${finalizeReadableTimespanString(Math.floor(timeBetweenInSeconds / secondsInAnHour), "hour")}`;
+        if (timeBetweenInSeconds < secondsInAMonth) return `${finalizeReadableTimespanString(Math.floor(timeBetweenInSeconds / secondsInADay), "day")}`;
+        if (timeBetweenInSeconds < secondsInAYear) return `${finalizeReadableTimespanString(Math.floor(timeBetweenInSeconds / secondsInAMonth), "month")}`;
+        else return "A long time ago";
+    }
+
+    function finalizeReadableTimespanString(displayNumber: number, timeIncrement: string) {
+        return `${displayNumber} ${timeIncrement}${displayNumber > 1 ? 's' : ''} ago`
     }
 
     return (
         <>
-            <h2><i class="fa-solid fa-bars-progress"></i>&nbsp;&nbsp;Recent Activity</h2>
-            {commits.map(commit => 
-                <div class="commit-record">
-                    <div class="commit-record-left">
-                        <div class="commit-primary-details">
-                        <i class="fa-solid fa-code-commit"></i>&nbsp;
-                        <div class="changes">
-                            <span class="additions">+{commit.numberOfAdditions}</span> / <span class="deletions">-{commit.numberOfDeletions}</span>
-                        </div>
-                        <div>&nbsp;committed to&nbsp;</div>
-                        <div class="commit-repository"><b><i>{commit.repository}</i>&nbsp;</b></div>
-                        <div class="commit-message">
-                            |&nbsp;<i class="fa-regular fa-message"></i>&nbsp;
-                            {commit.message}
-                        </div>
-                        </div>
-                        <div class="commit-secondary-details">
-                           <div class="date">{getReadableTimespanString(commit.date)}</div>
-                        </div>
-                    </div>
-                    <div class="commit-hash">
-                        <a href="">
-                            {commit.hash.slice(0, 6)}
-                        </a>
-                    </div>
+            <h2 class="activity-title">
+                <div class="activity-title-text-wrapper">
+                    <i class="fa-solid fa-bars-progress"></i>&nbsp;&nbsp;Recent Activity
                 </div>
-            )}
-            {blogPosts.map(blogPost =>
-                <div class="commit-record">
-                    <div class="commit-record-left">
-                        <div class="commit-primary-details">
-                            <i class="fa-solid fa-newspaper"></i>&nbsp;
-                            <div>Published new blog post: <b class="emphasize">{blogPost.title}</b></div>
+                <div class="tabs">
+                    <a class="tab-option selected" href="" alt="All">
+                        <i class="fa-solid fa-asterisk"></i>
+                    </a>
+                    <a class="tab-option" href="" alt="Code">
+                        <i class="fa-solid fa-code-merge"></i>
+                    </a>
+                    <a class="tab-option" href="" alt="Posts">
+                        <i class="fa-solid fa-newspaper"></i>
+                    </a>
+                </div>
+            </h2>
+            <div class="activity-items-wrapper">
+                {commits.map(commit =>
+                    <div class="commit-record">
+                        <div class="commit-record-left">
+                            <div class="commit-primary-details">
+                                <i class="fa-solid fa-code-commit"></i>&nbsp;
+                                <div class="changes">
+                                    <span class="additions">+{commit.numberOfAdditions}</span> / <span class="deletions">-{commit.numberOfDeletions}</span>
+                                </div>
+                                <div>&nbsp;committed to&nbsp;</div>
+                                <div class="commit-repository"><b><i>{commit.repository}</i>&nbsp;</b></div>
+                                <div class="commit-message">
+                                    |&nbsp;<i class="fa-regular fa-message"></i>&nbsp;
+                                    {commit.message}
+                                </div>
+                            </div>
+                            <div class="commit-secondary-details">
+                                <div class="date">{getReadableTimespanString(commit.date)}</div>
+                            </div>
                         </div>
-                        <div class="commit-secondary-details">
-                            <div class="date">{getReadableTimespanString(blogPost.date)}</div>
+                        <div class="commit-hash">
+                            <a href="">
+                                {commit.hash.slice(0, 6)}
+                            </a>
                         </div>
                     </div>
-                    <div class="commit-hash">
+                )}
+                {blogPosts.map(blogPost =>
+                    <div class="commit-record">
+                        <div class="commit-record-left">
+                            <div class="commit-primary-details">
+                                <i class="fa-solid fa-newspaper"></i>&nbsp;
+                                <div>Published new blog post: <b class="emphasize">{blogPost.title}</b></div>
+                            </div>
+                            <div class="commit-secondary-details">
+                                <div class="date">{getReadableTimespanString(blogPost.date)}</div>
+                            </div>
+                        </div>
+                        <div class="commit-hash">
                             <a href="">
                                 <i class="fa-solid fa-link"></i>
                             </a>
                         </div>
-                </div>
-            )}
+                    </div>
+                )}
+            </div>
         </>
     );
 }

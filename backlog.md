@@ -1,9 +1,15 @@
 - [ ] Skills/Technologies page
     - [ ] Filter by things I like/am good at/don't like
-- [ ] Procedural rendering/animation for each blog post (seeded from hash of page contents)
+- [X] Procedural rendering/animation for each blog post (seeded from hash of page contents)
 - [ ] Holiday animations/themes
+    - Christmas
+    - Halloween
+    - Valentine's
 - [ ] Blog post tags (with color based on tag hash)
-- [ ] Contact form
-- [ ]
-
+- [ ] Working RSS
+- [ ] Projects page
+- [ ] Mobile friendly (all pages/posts)
+    - [ ] Smooth animation/restyle for mobile nav menu
+- [ ] Evicons - Active Evicon library
+- [ ] Evicons - Recent posts on Home
 - [ ] Recent commits
