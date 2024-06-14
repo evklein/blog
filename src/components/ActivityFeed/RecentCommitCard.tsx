@@ -14,13 +14,6 @@ export default function RecentCommitCard(props: RecentCommitCardProps) {
         return "code-commit";
     }
 
-    function getAppropriateDetailForCommitType() {
-        let commitMessage = props.commit.message;
-        if (commitMessage.startsWith(`Merge pull request #`)) return "PULL REQUEST CLOSED";
-        if (commitMessage.startsWith(`Merge branch '`)) return "BRANCH MERGED";
-        return commitMessage;
-    }
-
     return (
         <>
             <div class="activity-item-card">
