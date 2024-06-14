@@ -7,12 +7,26 @@ interface RecentCommitCardProps {
 };
 
 export default function RecentCommitCard(props: RecentCommitCardProps) {
+    function getAppropriateIconForCommitType() {
+        let commitMessage = props.commit.message;
+        if (commitMessage.startsWith(`Merge pull request #`)) return "code-pull-request";
+        if (commitMessage.startsWith(`Merge branch '`)) return "code-merge";
+        return "code-commit";
+    }
+
+    function getAppropriateDetailForCommitType() {
+        let commitMessage = props.commit.message;
+        if (commitMessage.startsWith(`Merge pull request #`)) return "PULL REQUEST CLOSED";
+        if (commitMessage.startsWith(`Merge branch '`)) return "BRANCH MERGED";
+        return commitMessage;
+    }
+
     return (
         <>
             <div class="activity-item-card">
                 <div class="card-left">
                     <div class="commit-primary-details">
-                        <i class="card-icon fa-solid fa-code-commit"></i>&nbsp;
+                        <i class={`card-icon fa-solid fa-${getAppropriateIconForCommitType()}`}></i>&nbsp;
                         <span class="changes">
                             <span class="additions">+{props.commit.numberOfAdditions}</span> / <span class="deletions">-{props.commit.numberOfDeletions}</span>
                         </span>
