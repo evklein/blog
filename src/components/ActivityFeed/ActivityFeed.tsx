@@ -3,6 +3,7 @@ import "../../styles/activity-feed.css";
 import type { MarkdownInstance } from 'astro';
 import RecentCommitCard from './RecentCommitCard';
 import RecentBlogPostCard from './RecentBlogPostCard';
+import ErrorNotification from './ErrorNotification';
 
 interface RecentCommitsProps {
     blogPosts: MarkdownInstance<Record<string, any>>[];
@@ -39,35 +40,54 @@ export default function RecentCommits(props: RecentCommitsProps) {
     const [selectedTab, setSelectedTab] = useState<string>("posts");
     const [commits, setCommits] = useState<CommitDetails[]>([]);
     const [blogPosts, setBlogPosts] = useState<BlogPostRecord[]>([]);
+    const [gitApiFailStatus, setGitApiFailStatus] = useState<boolean>(false);
 
     function fetchMostRecentCommitReferences() {
         const SEARCH_ENDPOINT = "https://api.github.com/search/commits?q=author:evklein&sort=author-date&order=desc&page=1";
         fetch(SEARCH_ENDPOINT)
-        .then(response => response.json())
-        .then(data => {
-            let mostRecentFiveCommits = data["items"].slice(0, 12);
-            mostRecentFiveCommits.forEach((commit: CommitReference) => {
-                fetchCommitDetails(commit["url"], commit["repository"]["name"]);
-            })
+        .then(response => {
+            if (!response.ok) throw new Error("Git search query failed");
+            return response.json()
+        })
+        .then(
+            (data) => {
+                let mostRecentFiveCommits = data["items"].slice(0, 12);
+                mostRecentFiveCommits.forEach((commit: CommitReference) => {
+                    fetchCommitDetails(commit["url"], commit["repository"]["name"]);
+                });
+                setGitApiFailStatus(false);
+            }
+        ).catch(error => {
+            console.log(error);
+            setGitApiFailStatus(true);
         });
     }
 
     function fetchCommitDetails(commitUrl: string, repository: string) {
         fetch(commitUrl)
-            .then(response => response.json())
-            .then(data => {
-                let commitDetails: CommitDetails = {
-                    type: "git-commit",
-                    hash: data["sha"],
-                    repository,
-                    date: data["commit"]["author"]["date"],
-                    message: data["commit"]["message"],
-                    numberOfAdditions: data["stats"]["additions"],
-                    numberOfDeletions: data["stats"]["deletions"],
-                    numberOfFilesModified: data["files"].length,
-                    viewLink: data["html_url"],
-                };
-                setCommits(commits => [...commits, commitDetails]);
+            .then(response => {
+                if (!response.ok) throw new Error("Git commit detail fetch failed");
+                return response.json();
+            })
+            .then(
+                (data) => {
+                    let commitDetails: CommitDetails = {
+                        type: "git-commit",
+                        hash: data["sha"],
+                        repository,
+                        date: data["commit"]["author"]["date"],
+                        message: data["commit"]["message"],
+                        numberOfAdditions: data["stats"]["additions"],
+                        numberOfDeletions: data["stats"]["deletions"],
+                        numberOfFilesModified: data["files"].length,
+                        viewLink: data["html_url"],
+                    };
+                    setCommits(commits => [...commits, commitDetails]);
+                    setGitApiFailStatus(false);
+                },
+            ).catch(error => {
+                console.error(error);
+                setGitApiFailStatus(true);
             });
     }
 
@@ -84,17 +104,6 @@ export default function RecentCommits(props: RecentCommitsProps) {
         })
     }, [props.blogPosts]);
 
-    function getItemsToDisplay(): CardInfo[] {
-        switch (selectedTab) {
-            case "code":
-                return commits.sort(cardSortByDateHandler).slice(0, 15);
-            case "posts":
-                return blogPosts.sort(cardSortByDateHandler).slice(0, 6);
-            default:
-                return [...commits, ...blogPosts].sort(cardSortByDateHandler);
-        }
-    }
-
     function cardSortByDateHandler(a: CardInfo, b: CardInfo) {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
     }
@@ -108,6 +117,30 @@ export default function RecentCommits(props: RecentCommitsProps) {
             default:
                 return null;
         }
+    }
+
+    function getFeedContent() {
+        let cards: CardInfo[] = [];
+        let gitErrorMessage = gitApiFailStatus ? <ErrorNotification errorMessage='Git events could not be fetched. Please try again later.' /> : null;
+        switch (selectedTab) {
+            case "code":
+                cards = commits ? commits.sort(cardSortByDateHandler).slice(0, 15) : [];
+                break;
+            case "posts":
+                gitErrorMessage = null; // Don't show errors when all user is viewing are posts
+                cards = blogPosts ? blogPosts.sort(cardSortByDateHandler).slice(0, 6) : [];
+                break;
+            default:
+                cards = [...commits, ...blogPosts].sort(cardSortByDateHandler);
+                break;
+        }
+        
+        return(
+            <>
+                {gitErrorMessage}
+                {cards.map((activity, index) => getCardComponentForActivityItem(activity, index))}
+            </>
+        );
     }
 
     return (
@@ -129,7 +162,7 @@ export default function RecentCommits(props: RecentCommitsProps) {
                 </div>
             </h2>
             <div class="activity-items-wrapper">
-                {getItemsToDisplay().map((activity, index) => getCardComponentForActivityItem(activity, index))}
+                {getFeedContent()}
             </div>
         </>
     );

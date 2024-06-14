@@ -5,30 +5,24 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <div class="main-about">
         <h1>About Me</h1>
         <p>
-            I'm a <b class="highlight">software engineer</b>. I grew up in
-            Indianapolis, and I'm still here. I started programming in 2014, and
-            I graduated from <b class="highlight">Purdue University</b> with my BS
-            in computer science in 2020 (I also minored in <b class="highlight"
-                >classical music history & theory</b
+            I'm a software engineer. I'm from Indianapolis, and I moved back here after school. I started programming in 2014, and graduated from <span class="highlight purdue">Purdue University</span> with my BS
+            in <b>computer science</b> in 2020 (I also minored in <b>classical music history & theory</b
             >, which I love talking about).
         </p>
         <p>
-            I've worked professionally as a software engineer since <b
-                class="highlight">June 2020</b
-            >. I've worked in a number of different sectors, including
+            My career as a professional software engineer began in June of 2020. I've worked in a number of different sectors, including
             agriculture, insurance, consulting, and energy.
         </p>
         <p>
-            Starting in Fall 2024 I'll be back in school at <b
-                class="highlight">Indiana University</b
-            > to earn my <b class="highlight">Masters in Data Science</b> degree. I hope
+            I'm currently enrolled in graduate school at <span class="highlight iu">Indiana University</span
+            > with the goal of earning my master's degree in <b>data science</b>. I hope
             to use what I learn to become great at gluing together the domains of
             software engineering and data science.
         </p>
         <p>
             This site is my home base for documenting my resume, thoughts,
             projects, and more. If you'd like to reach out, you can contact me
-            at <b id="email-section"></b>.
+            at <span id="email-section"></span>.
         </p>
     </div>
     <div class="site-about">
@@ -36,13 +30,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <h3>About This Site</h3>
         <p>
             This site is built with <a href="https://astro.build/">Astro</a>,
-            which is a <b>great</b> web technology, in my opinion. Some of the components
-            are written with <a href="https://react.dev/">React</a>, where I
-            need to do some client-side stuff. Also lots of vanilla JS floating
-            around. Kinda of a mess, ngl.
+            and was adapted from the <a href="https://docs.astro.build/en/tutorial/0-introduction/">build your own blog tutorial</a>. Some of the components
+            are written with <a href="https://react.dev/">React</a>. Styling is accomplished with vanilla CSS.
         </p>
         <p>
-            The site is hosted in an static web application provided by Azure
+            The site is hosted in a static web application provided by Azure
             (free tier). The source code can be found on <a
                 href="https://github.com/evklein/blog">my Github</a
             >.
@@ -51,10 +43,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 </BaseLayout>
 <script>
     addEventListener("DOMContentLoaded", (_) => {
-        console.log('what!');
         let emailSection = document.getElementById('email-section');
         if (emailSection) {
-            emailSection.innerText = 'eklein217@gmail.com';
+            emailSection.innerHTML = `
+                <b>
+                    eklein217
+                    <i class="fa-solid fa-at"></i>
+                    gmail.com
+                </b>
+            `;
         }
     });
 </script>
@@ -67,7 +64,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
 
     .highlight {
+        font-weight: bold;
         color: #42bfa0;
+    }
+    .purdue {
+        color: #cfb991 !important;
+    }
+     .iu {
+        color: #990000;
+    }
+    #email-section {
+        font-weight: bold;
     }
     .site-about {
         margin-top: 5rem;

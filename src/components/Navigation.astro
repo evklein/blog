@@ -9,11 +9,11 @@
         <i class="nav-link-icon fa-regular fa-user"></i>
         &nbsp;&nbsp;About
     </a>
-    <a class="nav-link" id="Projects" href="https://www.github.com/evklein">
+    <a class="nav-link" id="Projects" href="/projects">
         <i class="nav-link-icon fa-solid fa-laptop-code"></i>
         &nbsp;&nbsp;Projects
     </a>
-    <a class="nav-link" id="Blog" href="/blog/">
+    <a class="nav-link" id="Blog" href="/blog">
         <i class="nav-link-icon fa-regular fa-newspaper"></i>
         &nbsp;&nbsp;Blog
     </a>
@@ -35,14 +35,18 @@
         selectedNavElement.style.fontWeight = "bold";
     }
 
+    if (window.location.href.includes("posts")) {
+        let blogElement = document.getElementById("Blog");
+        if (blogElement) {
+            blogElement.style.fontWeight = "bold";
+        }
+    }
+
     if (userIsOnMobile) {
         let links = document.querySelectorAll("a.nav-link");
-        console.log(links);
         links.forEach(link => {
             let iconElement = link.querySelectorAll<HTMLElement>('.nav-link-icon')[0];
-            console.log(iconElement);
             if (iconElement) {
-                console.log('setting styling');
                 iconElement.style.display = "block";
             }
         });

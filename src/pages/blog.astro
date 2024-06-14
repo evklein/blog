@@ -18,7 +18,7 @@ const pageTitle = "Blog";
                 )
                 .map((post) => (
                     <div class="post">
-                        <h3>
+                        <h3 class="post-title">
                             <a href={post.url}>{post.frontmatter.title}</a>
                             <div class="right-info">
                                 <p class="date">
@@ -71,6 +71,7 @@ const pageTitle = "Blog";
     h3 {
         display: inline-block;
         width: 100%;
+        margin: 10px 0 2px;
     }
     .right-info {
         float: right;

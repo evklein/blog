@@ -1,0 +1,121 @@
+---
+import Evicon from "./Evicon/Evicon";
+
+const {
+    status,
+    year,
+    title,
+    description,
+    sourceUrl,
+    articleUrl,
+    demoUrl,
+    productionUrl
+  } = Astro.props;
+
+    const statusColors: Record<string, string> = {
+        active: 'green',
+        inactive: 'darkred',
+        pending: '#dfa437',
+        unknown: 'purple' // default color or additional statuses
+    };
+    const statusTitles: Record<string, string> = {
+        active: "I'm actively working on this, expect updates in the future.",
+        inactive: "I haven't worked on this in a while, and probably won't return to it.",
+        pending: "I haven't worked on this in some time, but I'd like to return to it soon.",
+        unknown: "I'm not sure what's going on with this project. Stay tuned for updates."
+    }
+    const statusColor = statusColors[status];
+    const statusTitle = statusTitles[status];
+---
+
+<div class="projectCard">
+    <h2 class="title-bar">
+        <Evicon client:load seed={title} size={30} />
+        <span class="title-text">{title}</span>
+        <p class="year">
+            {year}
+            <div class="status" title={statusTitle}>
+                <i class=`status-icon fa-solid fa-circle` 
+                style={`color: ${statusColor}`}></i>
+            </div>
+        </p>
+    </h2>
+    <p><i>{description}</i></p>
+    <div class="buttonHub">
+        {sourceUrl && 
+            <a class="linkButton" href={sourceUrl}>
+                <i class="fa-solid fa-code-fork"></i>&nbsp;
+                Source
+            </a>
+        }
+        {articleUrl && 
+            <a class="linkButton" href={articleUrl}>
+                <i class="fa-solid fa-newspaper"></i>&nbsp;
+                Blog post
+            </a>
+        }
+        {demoUrl && 
+            <a class="linkButton" href={sourceUrl}>
+                <i class="fa-solid fa-play"></i>&nbsp;
+                Demo
+            </a>
+        }
+        {productionUrl && 
+            <a class="linkButton" href={productionUrl}>
+                <i class="fa-solid fa-server"></i>&nbsp;
+                Production
+            </a>
+        }
+    </div>
+</div>
+<style>
+    .projectCard {
+        width: 49%;
+        padding: 5px 20px;
+        margin: 10px 0;
+        border: 1px solid #c2c2c3;
+        border-radius: 4px;
+    }
+
+    h2.title-bar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0 5px;
+    }
+    h2.title-bar > .title-text {
+        font-size: 22px;
+    }
+    h2.title-bar > .year {
+        margin-left: auto;
+        font-size: 14pt;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .status-icon {
+        font-size: 10pt;
+        margin: 0 0 18px 5px;
+    }
+
+    .buttonHub {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    a.linkButton {
+        height: 40px;
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #c2c2c3;
+        font-size: 12pt;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        color: black;
+    }
+
+    @media (max-width: 768px) {
+        .projectCard {
+            width: 100%;
+        }
+    }
+</style>
