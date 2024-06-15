@@ -9,62 +9,81 @@ const {
     sourceUrl,
     articleUrl,
     demoUrl,
-    productionUrl
-  } = Astro.props;
+    productionUrl,
+} = Astro.props;
 
-    const statusColors: Record<string, string> = {
-        active: 'green',
-        inactive: 'darkred',
-        pending: '#dfa437',
-        unknown: 'purple' // default color or additional statuses
-    };
-    const statusTitles: Record<string, string> = {
-        active: "I'm actively working on this, expect updates in the future.",
-        inactive: "I haven't worked on this in a while, and probably won't return to it.",
-        pending: "I haven't worked on this in some time, but I'd like to return to it soon.",
-        unknown: "I'm not sure what's going on with this project. Stay tuned for updates."
-    }
-    const statusColor = statusColors[status];
-    const statusTitle = statusTitles[status];
+const statusColors: Record<string, string> = {
+    active: "green",
+    inactive: "darkred",
+    pending: "#dfa437",
+    unknown: "purple", // default color or additional statuses
+};
+const statusTitles: Record<string, string> = {
+    active: "I'm actively working on this, expect updates in the future.",
+    inactive:
+        "I haven't worked on this in a while, and probably won't return to it.",
+    pending:
+        "I haven't worked on this in some time, but I'd like to return to it soon.",
+    unknown:
+        "I'm not sure what's going on with this project. Stay tuned for updates.",
+};
+const statusColor = statusColors[status];
+const statusTitle = statusTitles[status];
 ---
 
 <div class="projectCard">
     <h2 class="title-bar">
-        <Evicon client:load seed={title} size={30} />
+        <Evicon
+            client:load
+            seed={title}
+            widthPx={30}
+            heightPx={30}
+            borderRadiusPx={30}
+            displayEviconDemoPageLink={true}
+        />
         <span class="title-text">{title}</span>
         <p class="year">
             {year}
             <div class="status" title={statusTitle}>
-                <i class=`status-icon fa-solid fa-circle` 
-                style={`color: ${statusColor}`}></i>
+                <i
+                    class=`status-icon fa-solid fa-circle`
+                    style={`color: ${statusColor}`}></i>
             </div>
         </p>
     </h2>
-    <p><i>{description}</i></p>
+    <p class="description-block"><i>{description}</i></p>
     <div class="buttonHub">
-        {sourceUrl && 
-            <a class="linkButton" href={sourceUrl}>
-                <i class="fa-solid fa-code-fork"></i>&nbsp;
-                Source
-            </a>
+        {
+            sourceUrl && (
+                <a class="linkButton" href={sourceUrl}>
+                    <i class="fa-solid fa-code-fork" />
+                    &nbsp; Source
+                </a>
+            )
         }
-        {articleUrl && 
-            <a class="linkButton" href={articleUrl}>
-                <i class="fa-solid fa-newspaper"></i>&nbsp;
-                Blog post
-            </a>
+        {
+            articleUrl && (
+                <a class="linkButton" href={articleUrl}>
+                    <i class="fa-solid fa-newspaper" />
+                    &nbsp; Blog post
+                </a>
+            )
         }
-        {demoUrl && 
-            <a class="linkButton" href={sourceUrl}>
-                <i class="fa-solid fa-play"></i>&nbsp;
-                Demo
-            </a>
+        {
+            demoUrl && (
+                <a class="linkButton" href={sourceUrl}>
+                    <i class="fa-solid fa-play" />
+                    &nbsp; Demo
+                </a>
+            )
         }
-        {productionUrl && 
-            <a class="linkButton" href={productionUrl}>
-                <i class="fa-solid fa-server"></i>&nbsp;
-                Production
-            </a>
+        {
+            productionUrl && (
+                <a class="linkButton" href={productionUrl}>
+                    <i class="fa-solid fa-server" />
+                    &nbsp; Production
+                </a>
+            )
         }
     </div>
 </div>
@@ -89,7 +108,10 @@ const {
     h2.title-bar > .year {
         margin-left: auto;
         font-size: 14pt;
-        font-family: 'Courier New', Courier, monospace;
+        font-family: "Courier New", Courier, monospace;
+    }
+    .description-block {
+        margin-top: 0;
     }
 
     .status-icon {

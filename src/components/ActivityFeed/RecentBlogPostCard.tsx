@@ -15,9 +15,9 @@ export default function RecentBlogPostCard(props: RecentBlogPostCardProps) {
                     <div class="primary-details">
                                 <Evicon seed={props.post.title}
                                         displayEviconDemoPageLink={true}
-                                        displayGrid={false}
-                                        displayGradientVectors={false}
-                                        size={25}
+                                        widthPx={25}
+                                        heightPx={25}
+                                        borderRadiusPx={25}
                                     />
                                 <div>Published new blog post: <b class="emphasize">{props.post.title}</b></div>
                     </div>

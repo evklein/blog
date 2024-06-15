@@ -1,4 +1,5 @@
 ---
+import Evicon from "../components/Evicon/Evicon";
 import BaseLayout from "../layouts/BaseLayout.astro";
 const allPosts = await Astro.glob("../pages/posts/*.md");
 const pageTitle = "Blog";
@@ -14,32 +15,31 @@ const pageTitle = "Blog";
         {
             allPosts
                 .sort(
-                    (a, b) => Number(new Date(b.frontmatter.pubDate)) - Number(new Date(a.frontmatter.pubDate))
+                    (a, b) =>
+                        Number(new Date(b.frontmatter.pubDate)) -
+                        Number(new Date(a.frontmatter.pubDate)),
                 )
                 .map((post) => (
                     <div class="post">
                         <h3 class="post-title">
+                            <Evicon
+                                client:load
+                                seed={post.frontmatter.title}
+                                widthPx={25}
+                                heightPx={25}
+                                borderRadiusPx={25}
+                                displayEviconDemoPageLink={true}
+                            />
                             <a href={post.url}>{post.frontmatter.title}</a>
                             <div class="right-info">
                                 <p class="date">
-                                    {
-                                        new Date(post.frontmatter.pubDate).toLocaleDateString(
-                                            "en-us",
-                                            {
-                                                month: "short",
-                                                day: "numeric",
-                                                }
-                                        )
-                                    }
+                                    {new Date(
+                                        post.frontmatter.pubDate,
+                                    ).toLocaleDateString("en-us", {
+                                        month: "short",
+                                        day: "numeric",
+                                    })}
                                 </p>
-                                <a href="/evicons" title="What is this smudge?">
-                                    <canvas
-                                        class="evicon"
-                                        id={post.frontmatter.title}
-                                        width="25"
-                                        height="25"
-                                    />
-                                </a>
                             </div>
                         </h3>
                     </div>
@@ -47,7 +47,6 @@ const pageTitle = "Blog";
         }
     </div>
 </BaseLayout>
-<script type="module" src="../src/scripts/evicons-loader.js"></script>
 <style>
     h1 {
         font-size: 3rem;
@@ -60,7 +59,8 @@ const pageTitle = "Blog";
         font-size: 12pt;
     }
     .post {
-        display: inline-block;
+        display: flex;
+        align-items: center;
         width: 90%;
         border-bottom: 1px solid hwb(165 26% 25%);
         display: flex;
@@ -69,13 +69,13 @@ const pageTitle = "Blog";
         border-bottom: none;
     }
     h3 {
-        display: inline-block;
+        display: flex;
         width: 100%;
         margin: 10px 0 2px;
     }
     .right-info {
-        float: right;
         display: flex;
+        margin-left: auto;
     }
     .date {
         margin: 0;
@@ -107,5 +107,7 @@ const pageTitle = "Blog";
         .post > h3 > a {
             width: 60%;
         }
+    }
+    .evicon-wrapper {
     }
 </style>

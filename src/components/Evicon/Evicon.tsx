@@ -289,13 +289,15 @@ const renderGradientVectors = (
 
 interface EviconProps {
   seed: string;
-  size: number;
+  widthPx: number;
+  heightPx: number;
+  borderRadiusPx?: number;
   displayEviconDemoPageLink?: boolean;
   displayGradientVectors?: boolean;
   displayGrid?: boolean;
 }
 
-const Evicon: preact.FunctionComponent<EviconProps> = ({ seed, size, displayEviconDemoPageLink, displayGradientVectors, displayGrid }) => {
+const Evicon: preact.FunctionComponent<EviconProps> = ({ seed, widthPx, heightPx, borderRadiusPx, displayEviconDemoPageLink, displayGradientVectors, displayGrid }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -327,9 +329,9 @@ const Evicon: preact.FunctionComponent<EviconProps> = ({ seed, size, displayEvic
     }
   }, [seed, displayGradientVectors, displayGrid]);
 
-  let canvas = <canvas ref={canvasRef} className="evicon" width={size} height={size} />;
+  let canvas = <canvas ref={canvasRef} className="evicon" width={widthPx} height={heightPx} style={`border-radius: ${borderRadiusPx ?? 0}px`}/>;
   return displayEviconDemoPageLink ? (
-    <a href="/evicons" title="What is this smudge?">
+    <a style={`height: ${heightPx}px`} href="/evicons" title="What is this smudge?">
       {canvas}
     </a>
   ) : canvas;

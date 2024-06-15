@@ -1,15 +1,13 @@
 ---
 import CommentSection from "../components/CommentSection.astro";
+import Evicon from "../components/Evicon/Evicon";
 import BaseLayout from "./BaseLayout.astro";
 const { frontmatter } = Astro.props;
 ---
 <BaseLayout pageTitle={frontmatter.title}>
     <br />
     <div id="top-info">
-        <a href="/evicons" title="What is this smudge?">
-            <canvas id={frontmatter.title} class="evicon" width="25" height="25"
-            ></canvas>
-        </a>
+        <Evicon client:load seed={frontmatter.title} widthPx={30} heightPx={30} borderRadiusPx={35} displayEviconDemoPageLink={true} />
         <p class="date">
             {
                 new Date(frontmatter.pubDate).toLocaleDateString(
@@ -31,6 +29,7 @@ const { frontmatter } = Astro.props;
 <style>
     #top-info {
         display: flex;
+        align-items: center;
         margin-top: 25px;
     }
     canvas {
@@ -41,7 +40,6 @@ const { frontmatter } = Astro.props;
     }
     .date {
         font-size: 14px;
-        margin: 0 7px;
         font-style: italic;
     }
 
@@ -59,7 +57,6 @@ const { frontmatter } = Astro.props;
         }
     }
 </style>
-<script type="module" src="../src/scripts/evicons-loader.js"></script>
 <script defer>
     let maxImageWidth = 800;
     let maxImageHeight = 400;
