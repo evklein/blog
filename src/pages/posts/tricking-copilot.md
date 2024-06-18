@@ -3,7 +3,7 @@ layout: ../../layouts/MarkdownPostLayout.astro
 title: 'An annoying quirk of Copilot and how to quickly get around it'
 pubDate: '2024-05-23T00:00:00'
 description: ''
-tags: ["astro", "blogging", "learning in public"]
+tags: ["Copilot", "🧌 Trolling"]
 ---
 Sometimes when ChatGPT is down I'll resort to using Copilot for more 'generic' requests. Copilot has more guardrails around it, making it impractical for any work that isn't software development, so sometimes you'll run into something like this:
 
