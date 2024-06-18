@@ -3,7 +3,7 @@ layout: ../../layouts/MarkdownPostLayout.astro
 title: 'On Relearning'
 pubDate: '2024-06-11T00:00:00'
 description: ''
-tags: ["astro", "blogging", "learning in public"]
+tags: ["Thoughts", "Writing", "Math"]
 ---
 
 ## On Relearning

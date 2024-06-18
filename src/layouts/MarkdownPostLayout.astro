@@ -1,6 +1,7 @@
 ---
 import CommentSection from "../components/CommentSection.astro";
 import Evicon from "../components/Evicon/Evicon";
+import Tag from "../components/Tag";
 import BaseLayout from "./BaseLayout.astro";
 const { frontmatter } = Astro.props;
 ---
@@ -24,6 +25,11 @@ const { frontmatter } = Astro.props;
     </div>
     <p><em>{frontmatter.description}</em></p>
     <slot />
+    <div class="tags-section">
+        {frontmatter.tags.map((tag: string) =>
+            <Tag client:load name={tag} />
+        )}
+    </div>
     <CommentSection issueTitle={frontmatter.title} />
 </BaseLayout>
 <style>
@@ -49,6 +55,10 @@ const { frontmatter } = Astro.props;
 
     .img-row {
         margin: auto;
+    }
+
+    .tags-section {
+        margin-top: 40px;
     }
 
     @media(max-width: 768px) {
