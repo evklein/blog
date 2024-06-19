@@ -5,13 +5,36 @@ import Tag from "../components/Tag";
 import BaseLayout from "./BaseLayout.astro";
 const { frontmatter } = Astro.props;
 ---
+
 <BaseLayout pageTitle={frontmatter.title}>
     <br />
     <div id="top-info">
-        <Evicon client:load seed={frontmatter.title} widthPx={30} heightPx={30} borderRadiusPx={35} displayEviconDemoPageLink={true} />
+        <Evicon
+            client:load
+            seed={frontmatter.title}
+            widthPx={30}
+            heightPx={30}
+            borderRadiusPx={35}
+            displayEviconDemoPageLink={true}
+        />
         <p class="date">
             {
-                new Date(frontmatter.pubDate).toLocaleDateString(
+                new Date(frontmatter.pubDate).toLocaleDateString("en-us", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                })
+            }
+        </p>
+    </div>
+    <p><em>{frontmatter.description}</em></p>
+    <slot />
+    {
+        frontmatter.lastEditedDate && (
+            <div class="last-edited-section">
+                Last edited
+                {new Date(frontmatter.lastEditedDate).toLocaleDateString(
                     "en-us",
                     {
                         weekday: "long",
@@ -19,16 +42,12 @@ const { frontmatter } = Astro.props;
                         month: "short",
                         day: "numeric",
                     },
-                )
-            }
-        </p>
-    </div>
-    <p><em>{frontmatter.description}</em></p>
-    <slot />
+                )}
+            </div>
+        )
+    }
     <div class="tags-section">
-        {frontmatter.tags.map((tag: string) =>
-            <Tag client:load name={tag} />
-        )}
+        {frontmatter.tags.map((tag: string) => <Tag client:load name={tag} />)}
     </div>
     <CommentSection issueTitle={frontmatter.title} />
 </BaseLayout>
@@ -49,8 +68,8 @@ const { frontmatter } = Astro.props;
         font-style: italic;
     }
 
-    img { 
-        margin:auto;
+    img {
+        margin: auto;
     }
 
     .img-row {
@@ -58,10 +77,15 @@ const { frontmatter } = Astro.props;
     }
 
     .tags-section {
-        margin-top: 40px;
+        margin-top: 30px;
     }
 
-    @media(max-width: 768px) {
+    .last-edited-section {
+        font-size: 10pt;
+        color: #555;
+    }
+
+    @media (max-width: 768px) {
         #top-info {
             margin-top: 0;
         }
@@ -81,7 +105,8 @@ const { frontmatter } = Astro.props;
 
             let previousWidth = targetImage.width;
             targetImage.width = maxImageWidth;
-            targetImage.height = maxImageWidth * targetImage.height /  previousWidth;
+            targetImage.height =
+                (maxImageWidth * targetImage.height) / previousWidth;
 
             targetImage.style.display = "block";
             targetImage.style.margin = "auto";
@@ -117,7 +142,7 @@ const { frontmatter } = Astro.props;
 
             let childImages = nextImageRow.getElementsByTagName("img");
             for (let j = 0; j < childImages.length; j++) {
-                childImages[j].style.marginLeft = '20px'; // TODO: figure out a better way to deal with this.
+                childImages[j].style.marginLeft = "20px"; // TODO: figure out a better way to deal with this.
             }
         }
     }
