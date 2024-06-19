@@ -2,7 +2,7 @@
 layout: ../../layouts/MarkdownPostLayout.astro
 title: 'On Relearning'
 pubDate: '2024-06-11T00:00:00'
-description: ''
+description: 'Dealing with the contradictions of re-learning something'
 tags: ["Thoughts", "Writing", "Math"]
 lastEditedDate: '2024-06-18T00:00:00'
 ---
