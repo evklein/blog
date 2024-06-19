@@ -136,14 +136,22 @@ h1 {
 }
 
 .tag {
-    margin: 0.25em;
+    margin: 5px;
     border-radius: .5em;
     padding: .5em 1em;
-    font-size: 12pt;
+    font-size: 10pt;
     border: none;
     border-radius: 50px;
     background-color: hwb(165 26% 25%);
     color: white;
+    text-shadow: 1px 1px 0 #000,
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            0px 1px 0 #000,
+            1px 0px 0 #000,
+            0px -1px 0 #000,
+            -1px 0px 0 #000;
 }
 
 

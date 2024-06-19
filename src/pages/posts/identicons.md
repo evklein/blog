@@ -3,7 +3,7 @@ layout: ../../layouts/MarkdownPostLayout.astro
 title: 'Introducing Evicons'
 pubDate: '2024-05-25T00:00:00'
 description: 'Building identicons for my site using perlin noise'
-tags: ["astro", "blogging", "learning in public"]
+tags: ["Evicons", "JavaScript"]
 ---
 # Introducing Evicons
 
