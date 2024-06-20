@@ -2,19 +2,21 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Typewriter from "../components/Typewriter";
 import ActivityFeed from "../components/ActivityFeed/ActivityFeed";
+import Typewriter2 from "../components/Typewriter2";
 const pageTitle = "Home";
 const allPosts = await Astro.glob("../pages/posts/*.md");
 ---
 <BaseLayout pageTitle={pageTitle}>
     <div class="home-body">
-        <Typewriter
+        <!-- <Typewriter
             client:load
             text="Hey, I'm Evan."
             makeMistakes
             mistakes={["Hey, I'um Evban", "Heaj, I'm ean"]}
             highlightStartIndex={9}
             highlightEndIndex={13}
-        />
+        /> -->
+        <Typewriter2 client:load text="Hey, I'm Evan." alternateTexts={[]}></Typewriter2>
         <div class="small-text">
             <p>
                 I'm a full-stack software engineer based in <b
