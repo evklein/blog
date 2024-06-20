@@ -28,7 +28,6 @@ const { frontmatter } = Astro.props;
             }
         </p>
     </div>
-    <p><em>{frontmatter.description}</em></p>
     <slot />
     {
         frontmatter.lastEditedDate && (
