@@ -9,7 +9,8 @@ const { issueTitle } = Astro.props;
         issue-term={issueTitle}
         theme="github-light"
         crossorigin="anonymous"
-        async>
+        async
+        {...{} as any}>
     </script>
 </div>
 <style>
