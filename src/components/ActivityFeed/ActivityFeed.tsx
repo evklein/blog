@@ -150,13 +150,13 @@ export default function RecentCommits(props: RecentCommitsProps) {
                     <i class="fa-solid fa-bars-progress"></i>&nbsp;&nbsp;Recent Activity
                 </div>
                 <div class="tabs">
-                    <span class={`tab-option ${selectedTab === 'posts' ? 'selected' : null}`} alt="Posts" onClick={() => setSelectedTab('posts')}>
+                    <span class={`tab-option ${selectedTab === 'posts' ? 'selected' : null}`} onClick={() => setSelectedTab('posts')}>
                         <i class="fa-solid fa-newspaper"></i>
                     </span>
-                    <span class={`tab-option ${selectedTab === 'code' ? 'selected' : null}`} alt="Code" onClick={() => setSelectedTab('code')}>
+                    <span class={`tab-option ${selectedTab === 'code' ? 'selected' : null}`} onClick={() => setSelectedTab('code')}>
                         <i class="fa-solid fa-code-merge"></i>
                     </span>
-                    <span class={`tab-option ${selectedTab === 'all' ? 'selected' : null}`} alt="All" onClick={() => setSelectedTab('all')}>
+                    <span class={`tab-option ${selectedTab === 'all' ? 'selected' : null}`} onClick={() => setSelectedTab('all')}>
                         <i class="fa-solid fa-asterisk"></i>
                     </span>
                 </div>
