@@ -1,54 +1,56 @@
 ---
+
 ---
+
 <div class="nav-links collapsed">
-    <a class="nav-link" id="Home" href ="/">
-        <i class="nav-link-icon fa-solid fa-home"></i>
-        &nbsp;&nbsp;Home
-    </a>
-    <a class="nav-link" id="About" href="/about">
-        <i class="nav-link-icon fa-regular fa-user"></i>
-        &nbsp;&nbsp;About
-    </a>
-    <a class="nav-link" id="Projects" href="/projects">
-        <i class="nav-link-icon fa-solid fa-laptop-code"></i>
-        &nbsp;&nbsp;Projects
-    </a>
-    <a class="nav-link" id="Blog" href="/blog">
-        <i class="nav-link-icon fa-regular fa-newspaper"></i>
-        &nbsp;&nbsp;Blog
-    </a>
-    <a class="nav-link offset" href="/resume.pdf">
+  <a class="nav-link" id="Home" href="/">
+    <i class="nav-link-icon fa-solid fa-home"></i>
+    &nbsp;&nbsp;Home
+  </a>
+  <a class="nav-link" id="About" href="/about">
+    <i class="nav-link-icon fa-regular fa-user"></i>
+    &nbsp;&nbsp;About
+  </a>
+  <a class="nav-link" id="Projects" href="/projects">
+    <i class="nav-link-icon fa-solid fa-laptop-code"></i>
+    &nbsp;&nbsp;Projects
+  </a>
+  <a class="nav-link" id="Blog" href="/blog">
+    <i class="nav-link-icon fa-regular fa-newspaper"></i>
+    &nbsp;&nbsp;Blog
+  </a>
+  <!-- <a class="nav-link offset" href="/resume.pdf">
         Resume
-    </a>
+    </a> -->
 </div>
 <style>
-    .nav-link-icon {
-        font-size: 11pt;
-        display: none;        
-    }
+  .nav-link-icon {
+    font-size: 11pt;
+    display: none;
+  }
 </style>
 <script>
-    let userIsOnMobile = window.screen.width <= 768;
-    let pageTitle = document.title;
-    let selectedNavElement = document.getElementById(pageTitle);
-    if (selectedNavElement) {
-        selectedNavElement.style.fontWeight = "bold";
-    }
+  let userIsOnMobile = window.screen.width <= 768;
+  let pageTitle = document.title;
+  let selectedNavElement = document.getElementById(pageTitle);
+  if (selectedNavElement) {
+    selectedNavElement.style.fontWeight = "bold";
+  }
 
-    if (window.location.href.includes("posts")) {
-        let blogElement = document.getElementById("Blog");
-        if (blogElement) {
-            blogElement.style.fontWeight = "bold";
-        }
+  if (window.location.href.includes("posts")) {
+    let blogElement = document.getElementById("Blog");
+    if (blogElement) {
+      blogElement.style.fontWeight = "bold";
     }
+  }
 
-    if (userIsOnMobile) {
-        let links = document.querySelectorAll("a.nav-link");
-        links.forEach(link => {
-            let iconElement = link.querySelectorAll<HTMLElement>('.nav-link-icon')[0];
-            if (iconElement) {
-                iconElement.style.display = "block";
-            }
-        });
-    }
+  if (userIsOnMobile) {
+    let links = document.querySelectorAll("a.nav-link");
+    links.forEach((link) => {
+      let iconElement = link.querySelectorAll<HTMLElement>(".nav-link-icon")[0];
+      if (iconElement) {
+        iconElement.style.display = "block";
+      }
+    });
+  }
 </script>

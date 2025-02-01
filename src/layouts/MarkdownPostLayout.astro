@@ -7,142 +7,138 @@ const { frontmatter } = Astro.props;
 ---
 
 <BaseLayout pageTitle={frontmatter.title}>
-    <br />
-    <div id="top-info">
-        <Evicon
-            client:load
-            seed={frontmatter.title}
-            widthPx={30}
-            heightPx={30}
-            borderRadiusPx={35}
-            displayEviconDemoPageLink={true}
-        />
-        <p class="date">
-            {
-                new Date(frontmatter.pubDate).toLocaleDateString("en-us", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                })
-            }
-        </p>
-    </div>
-    <slot />
-    {
-        frontmatter.lastEditedDate && (
-            <div class="last-edited-section">
-                Last edited
-                {new Date(frontmatter.lastEditedDate).toLocaleDateString(
-                    "en-us",
-                    {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                    },
-                )}
-            </div>
-        )
-    }
-    <div class="tags-section">
-        {frontmatter.tags.map((tag: string) => <Tag client:load name={tag} />)}
-    </div>
-    <CommentSection issueTitle={frontmatter.title} />
+  <br />
+  <div id="top-info">
+    <Evicon
+      client:load
+      seed={frontmatter.title}
+      widthPx={30}
+      heightPx={30}
+      borderRadiusPx={35}
+      displayEviconDemoPageLink={true}
+    />
+    <p class="date">
+      {
+        new Date(frontmatter.pubDate).toLocaleDateString("en-us", {
+          weekday: "long",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      }
+    </p>
+  </div>
+  <slot />
+  {
+    frontmatter.lastEditedDate && (
+      <div class="last-edited-section">
+        Last edited
+        {new Date(frontmatter.lastEditedDate).toLocaleDateString("en-us", {
+          weekday: "long",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })}
+      </div>
+    )
+  }
+  <div class="tags-section">
+    {frontmatter.tags.map((tag: string) => <Tag client:load name={tag} />)}
+  </div>
+  <CommentSection issueTitle={frontmatter.title} />
 </BaseLayout>
 <style>
+  #top-info {
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+  }
+  canvas {
+    margin-left: 10px;
+    margin-top: -3px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+  }
+  .date {
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  img {
+    margin: auto;
+  }
+
+  .img-row {
+    margin: auto;
+  }
+
+  .tags-section {
+    margin-top: 30px;
+  }
+
+  .last-edited-section {
+    font-size: 10pt;
+    color: #555;
+  }
+
+  @media (max-width: 768px) {
     #top-info {
-        display: flex;
-        align-items: center;
-        margin-top: 25px;
+      margin-top: 0;
     }
-    canvas {
-        margin-left: 10px;
-        margin-top: -3px;
-        border: 1px solid #aaa;
-        border-radius: 5px;
-    }
-    .date {
-        font-size: 14px;
-        font-style: italic;
-    }
-
-    img {
-        margin: auto;
-    }
-
-    .img-row {
-        margin: auto;
-    }
-
-    .tags-section {
-        margin-top: 30px;
-    }
-
-    .last-edited-section {
-        font-size: 10pt;
-        color: #555;
-    }
-
-    @media (max-width: 768px) {
-        #top-info {
-            margin-top: 0;
-        }
-    }
+  }
 </style>
 <script defer>
-    let maxImageWidth = 800;
-    let maxImageHeight = 400;
-    let userOnMobile = window.screen.width < 800;
+  let maxImageWidth = 800;
+  let maxImageHeight = 400;
+  let userOnMobile = window.screen.width < 800;
 
-    let images = document.getElementsByTagName("img");
+  let images = document.getElementsByTagName("img");
 
+  if (userOnMobile) {
+    maxImageWidth = window.screen.width - 50;
+    for (let i = 0; i < images.length; i++) {
+      let targetImage = images[i];
+
+      let previousWidth = targetImage.width;
+      targetImage.width = maxImageWidth;
+      targetImage.height = (maxImageWidth * targetImage.height) / previousWidth;
+
+      targetImage.style.display = "block";
+      targetImage.style.margin = "auto";
+    }
+  } else {
+    for (let i = 0; i < images.length; i++) {
+      let targetImage = images[i];
+
+      if (targetImage.height > maxImageHeight) {
+        let previousHeight = targetImage.height;
+        targetImage.width =
+          (maxImageHeight * targetImage.width) / previousHeight;
+        targetImage.height = maxImageHeight;
+      } else if (targetImage.width > maxImageWidth) {
+        let previousWidth = targetImage.width;
+        targetImage.width = maxImageWidth;
+        targetImage.height =
+          (maxImageWidth * targetImage.height) / previousWidth;
+      }
+
+      targetImage.style.display = "block";
+      targetImage.style.margin = "auto";
+    }
+  }
+
+  let imageRows = document.getElementsByClassName("img-row");
+  for (let i = 0; i < imageRows.length; i++) {
+    let nextImageRow = imageRows[i];
     if (userOnMobile) {
-        maxImageWidth = window.screen.width - 50;
-        for (let i = 0; i < images.length; i++) {
-            let targetImage = images[i];
-
-            let previousWidth = targetImage.width;
-            targetImage.width = maxImageWidth;
-            targetImage.height =
-                (maxImageWidth * targetImage.height) / previousWidth;
-
-            targetImage.style.display = "block";
-            targetImage.style.margin = "auto";
-        }
+      nextImageRow.style.display = "block";
     } else {
-        for (let i = 0; i < images.length; i++) {
-            let targetImage = images[i];
+      nextImageRow.style.display = "flex";
 
-            if (targetImage.height > maxImageHeight) {
-                let previousHeight = targetImage.height;
-                targetImage.width =
-                    (maxImageHeight * targetImage.width) / previousHeight;
-                targetImage.height = maxImageHeight;
-            } else if (targetImage.width > maxImageWidth) {
-                let previousWidth = targetImage.width;
-                targetImage.width = maxImageWidth;
-                targetImage.height =
-                    (maxImageWidth * targetImage.height) / previousWidth;
-            }
-
-            targetImage.style.display = "block";
-            targetImage.style.margin = "auto";
-        }
+      let childImages = nextImageRow.getElementsByTagName("img");
+      for (let j = 0; j < childImages.length; j++) {
+        childImages[j].style.marginLeft = "20px"; // TODO: figure out a better way to deal with this.
+      }
     }
-
-    let imageRows = document.getElementsByClassName("img-row");
-    for (let i = 0; i < imageRows.length; i++) {
-        let nextImageRow = imageRows[i];
-        if (userOnMobile) {
-            nextImageRow.style.display = "block";
-        } else {
-            nextImageRow.style.display = "flex";
-
-            let childImages = nextImageRow.getElementsByTagName("img");
-            for (let j = 0; j < childImages.length; j++) {
-                childImages[j].style.marginLeft = "20px"; // TODO: figure out a better way to deal with this.
-            }
-        }
-    }
+  }
 </script>
