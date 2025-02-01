@@ -6,108 +6,148 @@ const pageTitle = "Blog";
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-    <h1>Posts</h1>
-    <p class="small">
-        Various thoughts and musings on projects, engineering, and life.
-    </p>
+  <h1>Posts</h1>
+  <p class="small">
+    Various thoughts and musings on projects, engineering, and life.
+  </p>
+  <h2>2025</h2>
+  <div>
+    {
+      allPosts
+        .filter((p) => new Date(p.frontmatter.pubDate).getFullYear() === 2025)
+        .sort(
+          (a, b) =>
+            Number(new Date(b.frontmatter.pubDate)) -
+            Number(new Date(a.frontmatter.pubDate))
+        )
+        .map((post) => (
+          <div class="post">
+            <h3 class="post-title">
+              <Evicon
+                client:load
+                seed={post.frontmatter.title}
+                widthPx={25}
+                heightPx={25}
+                borderRadiusPx={25}
+                displayEviconDemoPageLink={true}
+              />
+              <a href={post.url}>{post.frontmatter.title}</a>
+              <div class="right-info">
+                <p class="date">
+                  {new Date(post.frontmatter.pubDate).toLocaleDateString(
+                    "en-us",
+                    {
+                      month: "short",
+                      day: "numeric",
+                    }
+                  )}
+                </p>
+              </div>
+            </h3>
+          </div>
+        ))
+    }
     <h2>2024</h2>
     <div>
-        {
-            allPosts
-                .sort(
-                    (a, b) =>
-                        Number(new Date(b.frontmatter.pubDate)) -
-                        Number(new Date(a.frontmatter.pubDate)),
-                )
-                .map((post) => (
-                    <div class="post">
-                        <h3 class="post-title">
-                            <Evicon
-                                client:load
-                                seed={post.frontmatter.title}
-                                widthPx={25}
-                                heightPx={25}
-                                borderRadiusPx={25}
-                                displayEviconDemoPageLink={true}
-                            />
-                            <a href={post.url}>{post.frontmatter.title}</a>
-                            <div class="right-info">
-                                <p class="date">
-                                    {new Date(
-                                        post.frontmatter.pubDate,
-                                    ).toLocaleDateString("en-us", {
-                                        month: "short",
-                                        day: "numeric",
-                                    })}
-                                </p>
-                            </div>
-                        </h3>
-                    </div>
-                ))
-        }
+      {
+        allPosts
+          .filter((p) => new Date(p.frontmatter.pubDate).getFullYear() === 2024)
+          .sort(
+            (a, b) =>
+              Number(new Date(b.frontmatter.pubDate)) -
+              Number(new Date(a.frontmatter.pubDate))
+          )
+          .map((post) => (
+            <div class="post">
+              <h3 class="post-title">
+                <Evicon
+                  client:load
+                  seed={post.frontmatter.title}
+                  widthPx={25}
+                  heightPx={25}
+                  borderRadiusPx={25}
+                  displayEviconDemoPageLink={true}
+                />
+                <a href={post.url}>{post.frontmatter.title}</a>
+                <div class="right-info">
+                  <p class="date">
+                    {new Date(post.frontmatter.pubDate).toLocaleDateString(
+                      "en-us",
+                      {
+                        month: "short",
+                        day: "numeric",
+                      }
+                    )}
+                  </p>
+                </div>
+              </h3>
+            </div>
+          ))
+      }
     </div>
-</BaseLayout>
-<style>
+  </div>
+  <style>
     h1 {
-        font-size: 3rem;
+      font-size: 3rem;
     }
     h2 {
-        font-size: 2.3rem;
-        margin-bottom: 0;
+      font-size: 2.3rem;
+      margin-bottom: 0;
     }
     p .small {
-        font-size: 12pt;
+      font-size: 12pt;
     }
     .post {
-        display: flex;
-        align-items: center;
-        width: 90%;
-        border-bottom: 1px solid hwb(165 26% 25%);
-        display: flex;
+      display: flex;
+      align-items: center;
+      width: 90%;
+      border-bottom: 1px solid hwb(165 26% 25%);
+      display: flex;
     }
     .post:last-child {
-        border-bottom: none;
+      border-bottom: none;
     }
     h3 {
-        display: flex;
-        width: 100%;
-        margin: 10px 0 2px;
+      display: flex;
+      width: 100%;
+      margin: 10px 0 2px;
     }
     .right-info {
-        display: flex;
-        margin-left: auto;
+      display: flex;
+      margin-left: auto;
     }
     .date {
-        margin: 0;
-        font-weight: lighter;
-        font-family: "Courier New", Courier, monospace;
+      margin: 0;
+      font-weight: lighter;
+      font-family: "Courier New", Courier, monospace;
     }
     a {
-        text-decoration: none;
-        color: black;
-        display: inline-block;
+      text-decoration: none;
+      color: black;
+      display: inline-block;
     }
     a:hover {
-        text-decoration: underline;
+      text-decoration: underline;
     }
 
     canvas {
-        margin-left: 10px;
-        margin-top: -3px;
-        border: 1px solid #aaa;
-        border-radius: 5px;
+      margin-left: 10px;
+      margin-top: -3px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
     }
 
     @media (max-width: 768px) {
-        .post {
-            min-height: 55px;
-            width: 100%;
-        }
+      .post {
+        min-height: 55px;
+        width: 100%;
+      }
 
-        .post > h3 > a {
-            width: 60%;
-        }
+      .post > h3 > a {
+        width: 60%;
+      }
     }
     .evicon-wrapper {
     }
-</style>
+  </style>
+</BaseLayout>

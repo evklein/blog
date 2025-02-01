@@ -9,7 +9,7 @@ export async function GET(context) {
     title: 'Evan Klein | Blog',
     description: 'Thoughts and musings on software engineering, life, etc.',
     site: context.site,
-    items: posts.map((post) => ({
+    items: posts.sort((a, b) => Number(new Date(b.frontmatter.pubDate)) - Number(new Date(a.frontmatter.pubDate))).map((post) => ({
       link: post.url,
       content: sanitizeHtml(post.compiledContent(), {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
