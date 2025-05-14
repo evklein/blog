@@ -1,6 +1,6 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
-title: "Grad School Check-in: ~40% Done"
+title: "Grad School Check-in: 40% Done"
 pubDate: "2025-05-06T00:00:00"
 description: ""
 tags: ["Year in Review"]
